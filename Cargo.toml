@@ -2,5 +2,15 @@
 name = "kompost"
 version = "0.1.0"
 edition = "2024"
+authors = ["Stefan Ulbrich"]
+description = """
+A crate to easen functional programming in rust by facilitating the creating
+composition of Iterator methods and anonymous Iterators—all without writing
+any trait or struct, without macros or unsafe code.
+"""
+license = "MIT"
+liccense-file = "license.md"
+repository = "https://github.com/StefanUlbrich/kompost"
+readme = "Readme.md"
 
 [dependencies]
