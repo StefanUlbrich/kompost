@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["AnonymousIterator"],"trait":["AnonymouslyIterable"]};
