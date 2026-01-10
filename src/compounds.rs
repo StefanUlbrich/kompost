@@ -1,0 +1,100 @@
+/*
+* Copyright (c) 2026 Stefan Ulbrich
+*
+* Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+* and associated documentation files (the “Software”), to deal in the Software without restriction,
+* including without limitation the rights to use, copy, modify, merge, publish, distribute,
+* sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in all copies or
+* substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+* BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+* NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+* DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
+* OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+use crate::{AnonymouslyIterable, ComposedIterable};
+
+/// Function to be used with the [`crate::ComposedIterable::composed`] method.
+/// It transposes an [`IntoIter`] of [`std::slice`], a data structure often encountered
+/// when storing 2D arrays in a single (row-major) array.
+///
+/// ## Example
+///
+/// ```
+/// # use kompost::{ComposedIterable, transpose};
+/// let x: Vec<_> = [1, 2, 3, 4]                 // An array in row-major order
+///     .chunks(2)                               // Only defined on slices and vectors
+///     .composed(transpose)
+///     .collect();
+/// assert_eq!(x, [1, 3, 2, 4]);
+/// ```
+pub fn transpose<'a, T: 'a + Copy>(
+    iter: impl IntoIterator<Item = &'a [T]>,
+) -> impl Iterator<Item = T> {
+    iter.into_iter()
+        .anonymous(
+            |chunks| chunks.map(|row| row.iter()).collect::<Vec<_>>(),
+            |context| {
+                let transposed = context // &mut Vec<Iter,i32>
+                    .iter_mut()
+                    .filter_map(|i| i.next()) // impl Iterator<Item = &i32>
+                    .collect::<Vec<_>>(); // Vec<&i32>
+                                          // If the iterators over the rows return `None`, transpose is empty
+                if transposed.is_empty() {
+                    None
+                } else {
+                    Some(transposed.into_iter())
+                }
+            },
+        ) // AnonymousIterator
+        .flatten() // impl Iterator<Item = &i32>
+        .copied() // impl Iterator<Item = i32>
+}
+
+/// A compound function to be used with the [`crate::ComposedIterator::composed`] method that takes
+/// an additional single `usize` as a parameter and computes a window of that size for *every element*
+/// of the iterator (periodic).
+///
+/// This is requires to write an additional closure when it is used, but this might change in the future
+/// when a functor trait might be written instead.
+///
+/// ## Example
+///
+/// ```
+/// # use kompost::{ComposedIterable, compounds::periodic_windows};
+/// let x = [1,2,3,4].iter().composed(|i| periodic_windows(3,i)).flatten();
+/// assert_eq!(x.collect::<i32>(), [1,2,3,2,3,4,3,4,1,4,1,2])
+/// ```
+pub fn periodic_windows(size: usize, it: impl ExactSizeIterator + Clone) -> impl Iterator {
+    it.anonymous(
+        |it| {
+            let len = it.len();
+            it.cycle().take(len)
+        },
+        move |it| {
+            let window = it.clone();
+            it.next();
+            Some(window.take(size))
+        },
+    )
+}
+
+// pub struct PeriodicWindows(pub usize);
+
+// impl PeriodicWindows {
+//     pub fn compound(&self, it: impl ExactSizeIterator + Clone) -> impl Iterator {
+//         it.anonymous(
+//             |it| it,
+//             |it| {
+//                 let window = it.clone();
+//                 it.next();
+//                 Some(window.take(self.0))
+//             },
+//         )
+//     }
+// }
