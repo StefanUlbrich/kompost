@@ -17,10 +17,10 @@
 * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-use crate::{AnonymouslyIterable, ComposedIterable};
+use crate::AnonymouslyIterable;
 
 /// Function to be used with the [`crate::ComposedIterable::composed`] method.
-/// It transposes an [`IntoIter`] of [`std::slice`], a data structure often encountered
+/// It transposes an [`IntoIterator`] of [`std::slice`], a data structure often encountered
 /// when storing 2D arrays in a single (row-major) array.
 ///
 /// ## Example
@@ -33,16 +33,15 @@ use crate::{AnonymouslyIterable, ComposedIterable};
 ///     .collect();
 /// assert_eq!(x, [1, 3, 2, 4]);
 /// ```
-pub fn transpose<'a, T: 'a + Copy>(
-    iter: impl IntoIterator<Item = &'a [T]>,
-) -> impl Iterator<Item = T> {
+pub fn transpose<'a, T: 'a + Copy>(iter: impl Iterator<Item = &'a [T]>) -> impl Iterator<Item = T> {
     iter.into_iter()
         .anonymous(
             |chunks| chunks.map(|row| row.iter()).collect::<Vec<_>>(),
             |context| {
                 let transposed = context // &mut Vec<Iter,i32>
                     .iter_mut()
-                    .filter_map(|i| i.next()) // impl Iterator<Item = &i32>
+                    .filter_map(Iterator::next) // impl Iterator<Item = &i32>
+                    // .filter_map(|i| i.next()) // impl Iterator<Item = &i32>
                     .collect::<Vec<_>>(); // Vec<&i32>
                                           // If the iterators over the rows return `None`, transpose is empty
                 if transposed.is_empty() {
@@ -56,7 +55,7 @@ pub fn transpose<'a, T: 'a + Copy>(
         .copied() // impl Iterator<Item = i32>
 }
 
-/// A compound function to be used with the [`crate::ComposedIterator::composed`] method that takes
+/// A compound function to be used with the [`crate::ComposedIterable::composed`] method that takes
 /// an additional single `usize` as a parameter and computes a window of that size for *every element*
 /// of the iterator (periodic).
 ///
@@ -67,34 +66,32 @@ pub fn transpose<'a, T: 'a + Copy>(
 ///
 /// ```
 /// # use kompost::{ComposedIterable, compounds::periodic_windows};
-/// let x = [1,2,3,4].iter().composed(|i| periodic_windows(3,i)).flatten();
-/// assert_eq!(x.collect::<i32>(), [1,2,3,2,3,4,3,4,1,4,1,2])
+/// let size=3;
+/// let x = [1, 2, 3, 4].into_iter()
+///     .composed(|i| periodic_windows(3, i))
+///     .flatten()
+///     .collect::<Vec<_>>();
+/// assert_eq!(x, [1,2,3,2,3,4,3,4,1,4,1,2])
 /// ```
-pub fn periodic_windows(size: usize, it: impl ExactSizeIterator + Clone) -> impl Iterator {
+pub fn periodic_windows<T>(
+    size: usize,
+    it: impl ExactSizeIterator<Item = T> + Clone,
+) -> impl Iterator<Item = impl Iterator<Item = T>> {
     it.anonymous(
         |it| {
             let len = it.len();
-            it.cycle().take(len)
+            (0usize, len, it.cycle())
+            // it.take(len)
         },
-        move |it| {
+        move |(i, len, it)| {
             let window = it.clone();
             it.next();
-            Some(window.take(size))
+            *i += 1;
+            if i <= len {
+                Some(window.take(size))
+            } else {
+                None
+            }
         },
     )
 }
-
-// pub struct PeriodicWindows(pub usize);
-
-// impl PeriodicWindows {
-//     pub fn compound(&self, it: impl ExactSizeIterator + Clone) -> impl Iterator {
-//         it.anonymous(
-//             |it| it,
-//             |it| {
-//                 let window = it.clone();
-//                 it.next();
-//                 Some(window.take(self.0))
-//             },
-//         )
-//     }
-// }

@@ -25,7 +25,7 @@ pub struct AnonymousIterator<Iter, In, Out, Init, Next, Context>
 where
     Init: FnOnce(Iter) -> Context,
     Next: Fn(&mut Context) -> Option<Out>,
-    Iter: IntoIterator<Item = In>,
+    Iter: Iterator<Item = In>,
 {
     // init_fn: Init,
     next_fn: Next,
@@ -38,7 +38,7 @@ impl<Iter, In, Out, Init, Next, Context> AnonymousIterator<Iter, In, Out, Init, 
 where
     Init: FnOnce(Iter) -> Context,
     Next: Fn(&mut Context) -> Option<Out>,
-    Iter: IntoIterator<Item = In>,
+    Iter: Iterator<Item = In>,
 {
     pub fn new(iter: Iter, init_fn: Init, next_fn: Next) -> Self {
         Self {
@@ -55,7 +55,7 @@ impl<Iter, In, Out, Init, Next, Context> Iterator
 where
     Init: FnOnce(Iter) -> Context,
     Next: Fn(&mut Context) -> Option<Out>,
-    Iter: IntoIterator<Item = In>,
+    Iter: Iterator<Item = In>,
 {
     type Item = Out;
 
@@ -70,7 +70,7 @@ pub trait AnonymouslyIterable<Iter, In, Out, Init, Next, Context>
 where
     Init: FnOnce(Iter) -> Context,
     Next: Fn(&mut Context) -> Option<Out>,
-    Iter: IntoIterator<Item = In>,
+    Iter: Iterator<Item = In>,
 {
     /// Creates an anonymous iterator.
     ///
@@ -96,6 +96,7 @@ where
     /// use kompost::AnonymouslyIterable;
     /// assert_eq!(
     ///     vec![1,2,3]
+    ///         .into_iter()
     ///         .anonymous(
     ///             |it| it.into_iter(),
     ///             |it| it.next()
@@ -171,7 +172,7 @@ where
     /// ```
     ///
     /// This can be conveniently "bundled" in a function—[`transpose()`](crate::transpose)
-    /// to be used with the [`compose()`](crate::ComposedIterable::compose) from this crate.
+    /// to be used with the [`composed()`](crate::ComposedIterable::composed) from this crate.
     fn anonymous(
         self,
         init_fn: Init,
@@ -184,7 +185,7 @@ impl<Iter, In, Out, Init, Next, Context> AnonymouslyIterable<Iter, In, Out, Init
 where
     Init: FnOnce(Iter) -> Context,
     Next: Fn(&mut Context) -> Option<Out>,
-    Iter: IntoIterator<Item = In>,
+    Iter: Iterator<Item = In>,
 {
     fn anonymous(
         self,

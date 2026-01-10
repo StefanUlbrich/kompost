@@ -22,13 +22,13 @@ use std::marker::PhantomData;
 /// Iterator that with a context and a closures called in the [`ComposedIterator::new`] and
 /// [`ComposedIterator::next`] methods. Used in the [`ComposedIterable`] trait.
 ///
-/// [`crate::AnonymousIterator`] could not be used as a constant closure cannot be used within
+/// [`crate::anonymous::AnonymousIterator`] could not be used as a constant closure cannot be used within
 /// the implementation of [`ComposedIterable`].
 pub struct ComposedIterator<IterIn, IterOut, In, Out, Init>
 where
     Init: FnOnce(IterIn) -> IterOut,
 
-    IterIn: IntoIterator<Item = In>,
+    IterIn: Iterator<Item = In>,
     IterOut: Iterator<Item = Out>,
 {
     iter: IterOut,
@@ -40,7 +40,7 @@ impl<IterIn, IterOut, In, Out, Init> ComposedIterator<IterIn, IterOut, In, Out, 
 where
     Init: FnOnce(IterIn) -> IterOut,
 
-    IterIn: IntoIterator<Item = In>,
+    IterIn: Iterator<Item = In>,
     IterOut: Iterator<Item = Out>,
 {
     pub fn new(iter: IterIn, init_fn: Init) -> Self {
@@ -56,7 +56,7 @@ impl<IterIn, IterOut, In, Out, Init> Iterator for ComposedIterator<IterIn, IterO
 where
     Init: FnOnce(IterIn) -> IterOut,
 
-    IterIn: IntoIterator<Item = In>,
+    IterIn: Iterator<Item = In>,
     IterOut: Iterator<Item = Out>,
 {
     type Item = Out;
@@ -69,7 +69,7 @@ pub trait ComposedIterable<IterIn, IterOut, In, Out, Init>
 where
     Init: FnOnce(IterIn) -> IterOut,
 
-    IterIn: IntoIterator<Item = In>,
+    IterIn: Iterator<Item = In>,
     IterOut: Iterator<Item = Out>,
 {
     /// Allows defining grouping frequently used [`Iterator`] methods (such as `map` or `scan`)
@@ -85,16 +85,15 @@ where
     /// ```
     /// use kompost::ComposedIterable;
     ///
-    /// fn favorite_pipeline(it: impl IntoIterator<Item = i32>) -> impl Iterator<Item = f64> {
-    ///     it.into_iter()
-    ///         .skip(5)
+    /// fn favorite_pipeline(it: impl Iterator<Item = i32>) -> impl Iterator<Item = f64> {
+    ///     it.skip(5)
     ///         .map(|x| x.pow(2))
     ///         .take_while(|x| *x < 100)
     ///         .map(|x| x as f64)
     /// }
     ///
     /// assert_eq!(
-    ///     [1, 2, 3, 4, 5, 6, 7].composed(favorite_pipeline).collect::<Vec<_>>(),
+    ///     [1, 2, 3, 4, 5, 6, 7].into_iter().composed(favorite_pipeline).collect::<Vec<_>>(),
     ///     vec![36.0f64, 49.0]
     /// )
     /// ```
@@ -105,7 +104,7 @@ impl<IterIn, IterOut, In, Out, Init> ComposedIterable<IterIn, IterOut, In, Out, 
 where
     Init: FnOnce(IterIn) -> IterOut,
 
-    IterIn: IntoIterator<Item = In>,
+    IterIn: Iterator<Item = In>,
     IterOut: Iterator<Item = Out>,
 {
     fn composed(self, init_fn: Init) -> ComposedIterator<IterIn, IterOut, In, Out, Init> {
