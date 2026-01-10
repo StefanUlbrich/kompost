@@ -1,3 +1,4 @@
+# From: https://github.com/JamesIves/github-pages-deploy-action
 name: Build and Deploy
 on:
   push:
@@ -5,20 +6,20 @@ on:
 
 permissions:
   contents: write
+
 jobs:
   build-and-deploy:
-    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    concurrency: ci-${{ github.ref }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v6
 
-      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
+      - name: Install and Build 🔧
         run: |
           cargo doc
-          touch target/doc/kompost/.nojekyll
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: target/doc/kompost # The folder the action should deploy.
+          folder: target/doc
