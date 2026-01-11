@@ -23,7 +23,7 @@ then computes the next value from the context and has mutable access to this con
 Hence, the <code>anonymous()</code> method strongly resembles <code>Iterator::scan()</code> with the notable
 exception that the first parameter is a closure.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
 
 <span class="macro">assert_eq!</span>(
     <span class="macro">vec!</span>[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]
@@ -38,7 +38,7 @@ exception that the first parameter is a closure.</p>
 <p>A slightly more complex idea is to collect the iterator first and define
 a custom behavior.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">assert_eq!</span>(
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="macro">assert_eq!</span>(
     [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
         .iter()                      <span class="comment">// Don't consume
         </span>.anonymous(
@@ -58,7 +58,7 @@ structure (<a href="https://doc.rust-lang.org/1.92.0/core/iter/traits/collect/tr
 writing a single struct or trait! The example is annotated with the inline type
 hints as shown by <a href="https://rust-analyzer.github.io/">rust-analyzer lsp</a>:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>x: Vec&lt;<span class="kw">_</span>&gt; = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]                 <span class="comment">// An array in row-major order
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">let </span>x: Vec&lt;<span class="kw">_</span>&gt; = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]                 <span class="comment">// An array in row-major order
     </span>.chunks(<span class="number">2</span>)                               <span class="comment">// Nested iterable: Chunks&lt;i32&gt;
     </span>.anonymous(
         |chunks| chunks.map(|row| row.iter()).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
@@ -86,7 +86,7 @@ to be used with the <a href="composed/trait.ComposedIterable.html#tymethod.compo
 methods (such as <code>map</code> or <code>scan</code>) that can be easily tested.</p>
 <p>A very simple example might look like:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::ComposedIterable;
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::ComposedIterable;
     <span class="kw">fn </span>favorite_pipeline(it: <span class="kw">impl </span>Iterator&lt;Item = i32&gt;) -&gt; <span class="kw">impl </span>Iterator&lt;Item = f64&gt; {
     it.skip(<span class="number">5</span>)
         .map(|x| x.pow(<span class="number">2</span>))
@@ -103,7 +103,7 @@ methods (such as <code>map</code> or <code>scan</code>) that can be easily teste
 how stricter type restrictions can be enforced (<code>ExactSizeIterator</code>), and a more advanced showcase
 of the <code>anonymous()</code> method.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">pub fn </span>periodic_windows&lt;T&gt;(
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">pub fn </span>periodic_windows&lt;T&gt;(
     size: usize,
     it: <span class="kw">impl </span>ExactSizeIterator&lt;Item = T&gt; + Clone,
 ) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw">impl </span>Iterator&lt;Item = T&gt;&gt; {
@@ -126,7 +126,7 @@ of the <code>anonymous()</code> method.</p>
 }</code></pre></div>
 <p>The compound function can then be easily applied:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>size=<span class="number">3</span>;
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">let </span>size=<span class="number">3</span>;
 <span class="kw">let </span>x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].into_iter()
     .composed(|i| periodic_windows(<span class="number">3</span>, i))
     .flatten()
