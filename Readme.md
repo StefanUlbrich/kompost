@@ -1,6 +1,8 @@
 # Kompost
 
 > 🚧🚧🚧🚧🚧 **Under construction** 🚧🚧🚧🚧🚧
+>
+> Links only work in the [docs](https://stefanulbrich.github.io/kompost/kompost)
 
 A crate to ease functional programming in rust by facilitating
 the composability and re-usability of Iterator methods and anonymous
@@ -44,12 +46,18 @@ The main concepts are
   as an anonymous function:
 
   ```rust
-  use kompost::*;
+    use kompost::*;
 
-  assert_eq!(
-    [1,2,3].into_iter().scan(0, |acc, i| { Some(*acc + i)}).collect::<Vec<_>>(),
-    [1,2,3].into_iter().anonymous(|it| (0,it), |(acc,it)| it.next().map(|i| *acc + i) ).collect::<Vec<_>>()
-  );
+    assert_eq!(
+        [1, 2, 3]
+            .into_iter()
+            .scan(0, |acc, i| { Some(*acc + i) })
+            .collect::<Vec<_>>(),
+        [1, 2, 3]
+            .into_iter()
+            .anonymous(|it| (0, it), |(acc, it)| it.next().map(|i| *acc + i))
+            .collect::<Vec<_>>()
+    );
   ```
 
   Full access to the iterator allows solving more complex tasks by means of functional programming without
