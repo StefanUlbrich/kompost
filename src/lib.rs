@@ -17,10 +17,7 @@
 * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-//! A crate to easen functional programming in rust by facilitating
-//! the creating composition of Iterator methods and anonymous
-//! Iterators—all without writing any trait or struct, without macros
-//! or unsafe code.
+#![doc=include_str!("../Readme.md")]
 
 pub mod anonymous;
 pub mod composed;

@@ -64,7 +64,7 @@ where
     }
 }
 
-/// Trait that adds a method to [`IntoIterator`] structs (i.e., [`Iterator`]s, [`slice`](std::slice)s, and [`Vec`]s) that
+/// Trait that adds a method to [`Iterator`] structs (i.e., [`Iterator`]s, [`slice`](std::slice)s, and [`Vec`]s) that
 /// allows painlessly create anonynmous iterators for one-time use.
 pub trait AnonymouslyIterable<Iter, In, Out, Init, Next, Context>
 where
@@ -79,18 +79,18 @@ where
     /// [`IntoIterator`] and returns a context (can consume data from the scope). The second closure
     /// computes the next value from the context. The [`anonymous()`](AnonymouslyIterable::anonymous)
     /// method resembles [`Iterator::scan()`](Iterator::scan) with the exception that the context
-    /// may depend on the calling [`IntoIterator`].
+    /// may depend on the calling [`Iterator`].
     ///
     /// ## Arguments
     ///
-    /// * `init_fn`: The closure that receives the current [`IntoIterator`] and produces the initial
+    /// * `init_fn`: The closure that receives the current [`Iterator`] and produces the initial
     ///   context.
     /// * `next_fn`: The closure that produces the next value from a mutable reference to the context.
     ///
     ///
     /// ## Examples
     ///
-    /// First let's create the trivial identity. An [`IntoIterator`] can be consumed:
+    /// First let's create the trivial identity.
     ///
     /// ```
     /// use kompost::AnonymouslyIterable;
@@ -103,19 +103,6 @@ where
     ///         )
     ///         .collect::<Vec<_>>(),
     ///     vec![1,2,3]
-    /// );
-    /// ```
-    ///
-    /// or borrowed:
-    ///
-    /// ```
-    /// # use kompost::AnonymouslyIterable;
-    /// assert_eq!(
-    ///     [1, 2, 3]
-    ///         .iter()
-    ///         .anonymous(|it| it.into_iter().cloned(), |it| it.next())
-    ///         .collect::<Vec<_>>(),
-    ///     vec![1, 2, 3]
     /// );
     /// ```
     ///
