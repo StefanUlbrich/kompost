@@ -41,12 +41,18 @@ that the context is initialized by a closure as well. That closure takes ownersh
 of the calling <a href="https://doc.rust-lang.org/1.92.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code> </a>instance. For example, <code>scan</code> itself can be implemented
 as an anonymous function:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>  <span class="kw">use </span>kompost::<span class="kw-2">*</span>;
 
-<span class="macro">assert_eq!</span>(
-  [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].into_iter().scan(<span class="number">0</span>, |acc, i| { <span class="prelude-val">Some</span>(<span class="kw-2">*</span>acc + i)}).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
-  [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].into_iter().anonymous(|it| (<span class="number">0</span>,it), |(acc,it)| it.next().map(|i| <span class="kw-2">*</span>acc + i) ).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()
-);</code></pre></div>
+  <span class="macro">assert_eq!</span>(
+      [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
+          .into_iter()
+          .scan(<span class="number">0</span>, |acc, i| { <span class="prelude-val">Some</span>(<span class="kw-2">*</span>acc + i) })
+          .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
+      [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
+          .into_iter()
+          .anonymous(|it| (<span class="number">0</span>, it), |(acc, it)| it.next().map(|i| <span class="kw-2">*</span>acc + i))
+          .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()
+  );</code></pre></div>
 <p>Full access to the iterator allows solving more complex tasks by means of functional programming without
 having to write your own named Iterator and boilerplate such as related traits and blanket implementations.
 This crate provides examples for <a href="compounds/fn.transpose.html" title="fn kompost::compounds::transpose">Iterator of Iterator transposition</a>
