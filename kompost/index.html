@@ -1,5 +1,134 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="A crate to easen functional programming in rust by facilitating the creating composition of Iterator methods and anonymous Iterators—all without writing any trait or struct, without macros or unsafe code."><title>kompost - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="kompost" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../static.files/storage-e2aeef58.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Crate kompost</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../kompost/index.html">kompost</a><span class="version">0.0.1</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#reexports">Crate Items</a></h3><ul class="block"><li><a href="#reexports" title="Re-exports">Re-exports</a></li><li><a href="#modules" title="Modules">Modules</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>kompost</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/kompost/lib.rs.html#20-31">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>A crate to easen functional programming in rust by facilitating
-the creating composition of Iterator methods and anonymous
-Iterators—all without writing any trait or struct, without macros
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Kompost"><title>kompost - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="kompost" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../static.files/storage-e2aeef58.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Crate kompost</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../kompost/index.html">kompost</a><span class="version">0.0.2</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#kompost" title="Kompost">Kompost</a><ul><li><a href="#anonymous-iterators" title="Anonymous iterators">Anonymous iterators</a></li><li><a href="#composed-iterators" title="Composed iterators">Composed iterators</a></li></ul></li></ul><h3><a href="#reexports">Crate Items</a></h3><ul class="block"><li><a href="#reexports" title="Re-exports">Re-exports</a></li><li><a href="#modules" title="Modules">Modules</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>kompost</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/kompost/lib.rs.html#20-28">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="kompost"><a class="doc-anchor" href="#kompost">§</a>Kompost</h2>
+<p>🚧🚧🚧🚧🚧 <strong>Under construction</strong> 🚧🚧🚧🚧🚧</p>
+<p>A crate to ease functional programming in rust by facilitating
+the composability and re-usability of Iterator methods and anonymous
+Iterators—all without writing any trait or struct, without using macros
 or unsafe code.</p>
-</div></details><h2 id="reexports" class="section-header">Re-exports<a href="#reexports" class="anchor">§</a></h2><dl class="item-table reexports"><dt id="reexport.AnonymouslyIterable"><code>pub use anonymous::<a class="trait" href="anonymous/trait.AnonymouslyIterable.html" title="trait kompost::anonymous::AnonymouslyIterable">AnonymouslyIterable</a>;</code></dt><dt id="reexport.ComposedIterable"><code>pub use composed::<a class="trait" href="composed/trait.ComposedIterable.html" title="trait kompost::composed::ComposedIterable">ComposedIterable</a>;</code></dt><dt id="reexport.transpose"><code>pub use compounds::<a class="fn" href="compounds/fn.transpose.html" title="fn kompost::compounds::transpose">transpose</a>;</code></dt></dl><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><dl class="item-table"><dt><a class="mod" href="anonymous/index.html" title="mod kompost::anonymous">anonymous</a></dt><dt><a class="mod" href="composed/index.html" title="mod kompost::composed">composed</a></dt><dt><a class="mod" href="compounds/index.html" title="mod kompost::compounds">compounds</a></dt></dl></section></div></main></body></html>
+<h3 id="anonymous-iterators"><a class="doc-anchor" href="#anonymous-iterators">§</a>Anonymous iterators</h3>
+<p>Adding a method to <code>Iterator</code> requires boilerplate in Rust—just have a look
+at [<code>src/anonymous.rs</code>]:</p>
+<ul>
+<li>A Struct that holds a state (e.g., the parent iterator)</li>
+<li>A Constructor</li>
+<li>The implementation of <code>Iterator</code> for the struct</li>
+<li>A trait that defines the method</li>
+<li>A blanket implementation of that trait for all <code>Iterator</code>s.</li>
+</ul>
+<p>This crate provides convenience by offering anonymous Iterators
+that are defined by two closures only.</p>
+<p>As all <code>Iterator</code>s, they are defined by their behavior during creation and in
+the next method. The former is given by a closure that receives the current
+<a href="https://doc.rust-lang.org/1.92.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> and returns a context structure. The second closure
+then computes the next value from the context and has mutable access to this context.
+Hence, the <code>anonymous()</code> method strongly resembles <code>Iterator::scan()</code> with the notable
+exception that the first parameter is a closure.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
+
+<span class="macro">assert_eq!</span>(
+    <span class="macro">vec!</span>[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]
+        .into_iter()
+        .anonymous(
+            |it| it.into_iter(),
+            |it| it.next()
+        )
+        .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
+    <span class="macro">vec!</span>[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]
+);</code></pre></div>
+<p>A slightly more complex idea is to collect the iterator first and define
+a custom behavior.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">assert_eq!</span>(
+    [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]
+        .iter()                      <span class="comment">// Don't consume
+        </span>.anonymous(
+            |it| it
+                .into_iter()
+                .rev()               <span class="comment">// Revert
+                </span>.copied()            
+                .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()
+                .into_iter(),        <span class="comment">// We need an iterator in next
+            </span>|it| it.next().map(|x| x + <span class="number">4</span>)
+        )
+        .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
+    <span class="macro">vec!</span>[<span class="number">7</span>, <span class="number">6</span>, <span class="number">5</span>]
+);</code></pre></div>
+<p>This enables more complex tasks. For instance, we can transpose a nested iterable
+structure (<a href="https://doc.rust-lang.org/1.92.0/core/iter/traits/collect/trait.IntoIterator.html" title="trait core::iter::traits::collect::IntoIterator"><code>IntoIterator</code></a><code>&lt;Item =</code> <a href="https://doc.rust-lang.org/1.92.0/core/iter/traits/collect/trait.IntoIterator.html" title="trait core::iter::traits::collect::IntoIterator"><code>IntoIterator</code></a><code>&lt;_&gt;&gt;</code>) without the need of
+writing a single struct or trait! The example is annotated with the inline type
+hints as shown by <a href="https://rust-analyzer.github.io/">rust-analyzer lsp</a>:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>x: Vec&lt;<span class="kw">_</span>&gt; = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]                 <span class="comment">// An array in row-major order
+    </span>.chunks(<span class="number">2</span>)                               <span class="comment">// Nested iterable: Chunks&lt;i32&gt;
+    </span>.anonymous(
+        |chunks| chunks.map(|row| row.iter()).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
+        |context| {
+            <span class="kw">let </span>transposed = context         <span class="comment">// &amp;mut Vec&lt;Iter,i32&gt;
+                </span>.iter_mut()
+                .filter_map(|i| i.next())    <span class="comment">// impl Iterator&lt;Item = &amp;i32&gt;
+                </span>.collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();        <span class="comment">// Vec&lt;&amp;i32&gt;
+                                             // If the iterators over the rows return `None`, transpose is empty
+            </span><span class="kw">if </span>transposed.is_empty() {
+                <span class="prelude-val">None
+            </span>} <span class="kw">else </span>{
+                <span class="prelude-val">Some</span>(transposed.into_iter())
+            }
+        },
+    )                                        <span class="comment">// AnonymousIterator
+    </span>.flatten()                               <span class="comment">// impl Iterator&lt;Item = &amp;i32&gt;
+    </span>.copied()                                <span class="comment">// impl Iterator&lt;Item = i32&gt;
+    </span>.collect();
+<span class="macro">assert_eq!</span>(x, [<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>]);</code></pre></div>
+<p>This can be conveniently “bundled” in a function—<a href="compounds/fn.transpose.html" title="fn kompost::compounds::transpose"><code>transpose()</code></a>
+to be used with the <a href="composed/trait.ComposedIterable.html#tymethod.composed" title="method kompost::composed::ComposedIterable::composed"><code>composed()</code></a> from this crate.</p>
+<h3 id="composed-iterators"><a class="doc-anchor" href="#composed-iterators">§</a>Composed iterators</h3>
+<p>Iterator composition allows defining reusable groups of frequently used combinations of <a href="https://doc.rust-lang.org/1.92.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>
+methods (such as <code>map</code> or <code>scan</code>) that can be easily tested.</p>
+<p>A very simple example might look like:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::ComposedIterable;
+    <span class="kw">fn </span>favorite_pipeline(it: <span class="kw">impl </span>Iterator&lt;Item = i32&gt;) -&gt; <span class="kw">impl </span>Iterator&lt;Item = f64&gt; {
+    it.skip(<span class="number">5</span>)
+        .map(|x| x.pow(<span class="number">2</span>))
+        .take_while(|x| <span class="kw-2">*</span>x &lt; <span class="number">100</span>)
+        .map(|x| x <span class="kw">as </span>f64)
+}
+<span class="macro">assert_eq!</span>(
+    [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>].into_iter().composed(favorite_pipeline).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
+    <span class="macro">vec!</span>[<span class="number">36.0f64</span>, <span class="number">49.0</span>]
+)</code></pre></div>
+<p><code>Kompost</code> comes with a few useful (at least to me), predefined compound functions such as
+<code>transpose</code> and <code>periodic_windows()</code>.</p>
+<p>The letter shows a few interesting aspects: How a compound function can accept an additional parameter,
+how stricter type restrictions can be enforced (<code>ExactSizeIterator</code>), and a more advanced showcase
+of the <code>anonymous()</code> method.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">pub fn </span>periodic_windows&lt;T&gt;(
+    size: usize,
+    it: <span class="kw">impl </span>ExactSizeIterator&lt;Item = T&gt; + Clone,
+) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw">impl </span>Iterator&lt;Item = T&gt;&gt; {
+    it.anonymous(
+        |it| {
+            <span class="kw">let </span>len = it.len();
+            (<span class="number">0usize</span>, len, it.cycle())
+        },
+        <span class="kw">move </span>|(i, len, it)| {
+            <span class="kw">let </span>window = it.clone();
+            it.next();
+            <span class="kw-2">*</span>i += <span class="number">1</span>;
+            <span class="kw">if </span>i &lt;= len {
+                <span class="prelude-val">Some</span>(window.take(size))
+            } <span class="kw">else </span>{
+                <span class="prelude-val">None
+            </span>}
+        },
+    )
+}</code></pre></div>
+<p>The compound function can then be easily applied:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>size=<span class="number">3</span>;
+<span class="kw">let </span>x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].into_iter()
+    .composed(|i| periodic_windows(<span class="number">3</span>, i))
+    .flatten()
+    .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+<span class="macro">assert_eq!</span>(x, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">2</span>])</code></pre></div></div></details><h2 id="reexports" class="section-header">Re-exports<a href="#reexports" class="anchor">§</a></h2><dl class="item-table reexports"><dt id="reexport.AnonymouslyIterable"><code>pub use anonymous::<a class="trait" href="anonymous/trait.AnonymouslyIterable.html" title="trait kompost::anonymous::AnonymouslyIterable">AnonymouslyIterable</a>;</code></dt><dt id="reexport.ComposedIterable"><code>pub use composed::<a class="trait" href="composed/trait.ComposedIterable.html" title="trait kompost::composed::ComposedIterable">ComposedIterable</a>;</code></dt><dt id="reexport.transpose"><code>pub use compounds::<a class="fn" href="compounds/fn.transpose.html" title="fn kompost::compounds::transpose">transpose</a>;</code></dt></dl><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><dl class="item-table"><dt><a class="mod" href="anonymous/index.html" title="mod kompost::anonymous">anonymous</a></dt><dt><a class="mod" href="composed/index.html" title="mod kompost::composed">composed</a></dt><dt><a class="mod" href="compounds/index.html" title="mod kompost::compounds">compounds</a></dt></dl></section></div></main></body></html>
