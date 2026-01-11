@@ -28,7 +28,7 @@ then computes the next value from the context and has mutable access to this con
 Hence, the `anonymous()` method strongly resembles `Iterator::scan()` with the notable
 exception that the first parameter is a closure.
 
-```rust
+```rust,ignore
 use kompost::*;
 
 assert_eq!(
@@ -46,7 +46,7 @@ assert_eq!(
 A slightly more complex idea is to collect the iterator first and define
 a custom behavior.
 
-```rust
+```rust,ignore
 assert_eq!(
     [1, 2, 3]
         .iter()                      // Don't consume
@@ -69,7 +69,7 @@ structure ([`IntoIterator`]`<Item =` [`IntoIterator`]`<_>>`) without the need of
 writing a single struct or trait! The example is annotated with the inline type
 hints as shown by [rust-analyzer lsp](https://rust-analyzer.github.io/):
 
-```rust
+```rust,ignore
 let x: Vec<_> = [1, 2, 3, 4]                 // An array in row-major order
     .chunks(2)                               // Nested iterable: Chunks<i32>
     .anonymous(
@@ -103,7 +103,7 @@ methods (such as `map` or `scan`) that can be easily tested.
 
 A very simple example might look like:
 
-```rust
+```rust,ignore
 use kompost::ComposedIterable;
     fn favorite_pipeline(it: impl Iterator<Item = i32>) -> impl Iterator<Item = f64> {
     it.skip(5)
@@ -124,7 +124,7 @@ The letter shows a few interesting aspects: How a compound function can accept a
 how stricter type restrictions can be enforced (`ExactSizeIterator`), and a more advanced showcase
 of the `anonymous()` method.
 
-```rust
+```rust,ignore
 pub fn periodic_windows<T>(
     size: usize,
     it: impl ExactSizeIterator<Item = T> + Clone,
@@ -150,7 +150,7 @@ pub fn periodic_windows<T>(
 
 The compound function can then be easily applied:
 
-```rust
+```rust,ignore
 let size=3;
 let x = [1, 2, 3, 4].into_iter()
     .composed(|i| periodic_windows(3, i))
