@@ -17,16 +17,16 @@
 <a href=#17 id=17 data-nosnippet>17</a>* OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <a href=#18 id=18 data-nosnippet>18</a>*/
 <a href=#19 id=19 data-nosnippet>19</a>
-<a href=#20 id=20 data-nosnippet>20</a></span><span class="kw">use </span><span class="kw">crate</span>::AnonymouslyIterable;
+<a href=#20 id=20 data-nosnippet>20</a></span><span class="kw">use </span><span class="kw">crate</span>::Anonymous;
 <a href=#21 id=21 data-nosnippet>21</a>
-<a href=#22 id=22 data-nosnippet>22</a><span class="doccomment">/// Function to be used with the [`crate::ComposedIterable::composed`] method.
+<a href=#22 id=22 data-nosnippet>22</a><span class="doccomment">/// Function to be used with the [`crate::Composed::composed`] method.
 <a href=#23 id=23 data-nosnippet>23</a>/// It transposes an [`IntoIterator`] of [`std::slice`], a data structure often encountered
 <a href=#24 id=24 data-nosnippet>24</a>/// when storing 2D arrays in a single (row-major) array.
 <a href=#25 id=25 data-nosnippet>25</a>///
 <a href=#26 id=26 data-nosnippet>26</a>/// ## Example
 <a href=#27 id=27 data-nosnippet>27</a>///
 <a href=#28 id=28 data-nosnippet>28</a>/// ```
-<a href=#29 id=29 data-nosnippet>29</a>/// # use kompost::{ComposedIterable, transpose};
+<a href=#29 id=29 data-nosnippet>29</a>/// # use kompost::{Composed, compounds::transpose};
 <a href=#30 id=30 data-nosnippet>30</a>/// let x: Vec&lt;_&gt; = [1, 2, 3, 4]                 // An array in row-major order
 <a href=#31 id=31 data-nosnippet>31</a>///     .chunks(2)                               // Only defined on slices and vectors
 <a href=#32 id=32 data-nosnippet>32</a>///     .composed(transpose)
@@ -55,7 +55,7 @@
 <a href=#55 id=55 data-nosnippet>55</a>        </span>.copied() <span class="comment">// impl Iterator&lt;Item = i32&gt;
 <a href=#56 id=56 data-nosnippet>56</a></span>}
 <a href=#57 id=57 data-nosnippet>57</a>
-<a href=#58 id=58 data-nosnippet>58</a><span class="doccomment">/// A compound function to be used with the [`crate::ComposedIterable::composed`] method that takes
+<a href=#58 id=58 data-nosnippet>58</a><span class="doccomment">/// A compound function to be used with the [`crate::Composed::composed`] method that takes
 <a href=#59 id=59 data-nosnippet>59</a>/// an additional single `usize` as a parameter and computes a window of that size for *every element*
 <a href=#60 id=60 data-nosnippet>60</a>/// of the iterator (periodic).
 <a href=#61 id=61 data-nosnippet>61</a>///
@@ -65,7 +65,7 @@
 <a href=#65 id=65 data-nosnippet>65</a>/// ## Example
 <a href=#66 id=66 data-nosnippet>66</a>///
 <a href=#67 id=67 data-nosnippet>67</a>/// ```
-<a href=#68 id=68 data-nosnippet>68</a>/// # use kompost::{ComposedIterable, compounds::periodic_windows};
+<a href=#68 id=68 data-nosnippet>68</a>/// # use kompost::{Composed, compounds::periodic_windows};
 <a href=#69 id=69 data-nosnippet>69</a>/// let size=3;
 <a href=#70 id=70 data-nosnippet>70</a>/// let x = [1, 2, 3, 4].into_iter()
 <a href=#71 id=71 data-nosnippet>71</a>///     .composed(|i| periodic_windows(3, i))

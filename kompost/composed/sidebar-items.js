@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["ComposedIterator"],"trait":["ComposedIterable"]};
+window.SIDEBAR_ITEMS = {"struct":["ComposedIterator"],"trait":["Composed"]};
