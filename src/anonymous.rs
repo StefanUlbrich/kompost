@@ -66,7 +66,7 @@ where
 
 /// Trait that adds a method to [`Iterator`] structs (i.e., [`Iterator`]s, [`slice`](std::slice)s, and [`Vec`]s) that
 /// allows painlessly create anonynmous iterators for one-time use.
-pub trait AnonymouslyIterable<Iter, In, Out, Init, Next, Context>
+pub trait Anonymous<Iter, In, Out, Init, Next, Context>
 where
     Init: FnOnce(Iter) -> Context,
     Next: Fn(&mut Context) -> Option<Out>,
@@ -77,7 +77,7 @@ where
     /// The iterator is defined by its behavior upon creation ([`AnonymousIterator::new`]) and when
     /// [`AnonymousIterator::next`] are called. The former is set by a closure that receives the current
     /// [`IntoIterator`] and returns a context (can consume data from the scope). The second closure
-    /// computes the next value from the context. The [`anonymous()`](AnonymouslyIterable::anonymous)
+    /// computes the next value from the context. The [`anonymous()`](Anonymous::anonymous)
     /// method resembles [`Iterator::scan()`](Iterator::scan) with the exception that the context
     /// may depend on the calling [`Iterator`].
     ///
@@ -86,80 +86,6 @@ where
     /// * `init_fn`: The closure that receives the current [`Iterator`] and produces the initial
     ///   context.
     /// * `next_fn`: The closure that produces the next value from a mutable reference to the context.
-    ///
-    ///
-    /// ## Examples
-    ///
-    /// First let's create the trivial identity.
-    ///
-    /// ```
-    /// use kompost::AnonymouslyIterable;
-    /// assert_eq!(
-    ///     vec![1,2,3]
-    ///         .into_iter()
-    ///         .anonymous(
-    ///             |it| it.into_iter(),
-    ///             |it| it.next()
-    ///         )
-    ///         .collect::<Vec<_>>(),
-    ///     vec![1,2,3]
-    /// );
-    /// ```
-    ///
-    /// A slightly more complex idea is to collect the iterator first and define
-    /// a custom behavior.
-    ///
-    /// ```
-    /// # use kompost::AnonymouslyIterable;
-    /// assert_eq!(
-    ///     [1, 2, 3]
-    ///         .iter()                      // Don't consume
-    ///         .anonymous(
-    ///             |it| it
-    ///                 .into_iter()
-    ///                 .rev()               // Revert
-    ///                 .copied()            
-    ///                 .collect::<Vec<_>>()
-    ///                 .into_iter(),        // We need an iterator in next
-    ///             |it| it.next().map(|x| x + 4)
-    ///         )
-    ///         .collect::<Vec<_>>(),
-    ///     vec![7, 6, 5]
-    /// );
-    /// ```
-    ///
-    /// This enables more complex tasks. For instance, we can transpose a nested iterable
-    /// structure ([`IntoIterator`]`<Item =` [`IntoIterator`]`<_>>`) without the need of
-    /// writing a single struct or trait! The example is annotated with the inline type
-    /// hints as shown by [rust-analyzer lsp](https://rust-analyzer.github.io/):
-    ///
-    /// ```
-    /// # use kompost::AnonymouslyIterable;
-    /// let x: Vec<_> = [1, 2, 3, 4]                 // An array in row-major order
-    ///     .chunks(2)                               // Nested iterable: Chunks<i32>
-    ///     .anonymous(
-    ///         |chunks| chunks.map(|row| row.iter()).collect::<Vec<_>>(),
-    ///         |context| {
-    ///             let transposed = context         // &mut Vec<Iter,i32>
-    ///                 .iter_mut()
-    ///                 .filter_map(|i| i.next())    // impl Iterator<Item = &i32>
-    ///                 .collect::<Vec<_>>();        // Vec<&i32>
-    ///                                              // If the iterators over the rows return `None`, transpose is empty
-    ///             if transposed.is_empty() {
-    ///                 None
-    ///             } else {
-    ///                 Some(transposed.into_iter())
-    ///             }
-    ///         },
-    ///     )                                        // AnonymousIterator
-    ///     .flatten()                               // impl Iterator<Item = &i32>
-    ///     .copied()                                // impl Iterator<Item = i32>
-    ///     .collect();
-    /// assert_eq!(x, [1, 3, 2, 4]);
-    /// ```
-    ///
-    /// This can be conveniently "bundled" in a function—[`transpose()`](crate::transpose)
-    /// to be used with the [`composed()`](crate::ComposedIterable::composed) from this crate.
     fn anonymous(
         self,
         init_fn: Init,
@@ -167,8 +93,7 @@ where
     ) -> AnonymousIterator<Iter, In, Out, Init, Next, Context>;
 }
 
-impl<Iter, In, Out, Init, Next, Context> AnonymouslyIterable<Iter, In, Out, Init, Next, Context>
-    for Iter
+impl<Iter, In, Out, Init, Next, Context> Anonymous<Iter, In, Out, Init, Next, Context> for Iter
 where
     Init: FnOnce(Iter) -> Context,
     Next: Fn(&mut Context) -> Option<Out>,

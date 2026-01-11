@@ -17,16 +17,16 @@
 * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-use crate::AnonymouslyIterable;
+use crate::Anonymous;
 
-/// Function to be used with the [`crate::ComposedIterable::composed`] method.
+/// Function to be used with the [`crate::Composed::composed`] method.
 /// It transposes an [`IntoIterator`] of [`std::slice`], a data structure often encountered
 /// when storing 2D arrays in a single (row-major) array.
 ///
 /// ## Example
 ///
 /// ```
-/// # use kompost::{ComposedIterable, transpose};
+/// # use kompost::{Composed, compounds::transpose};
 /// let x: Vec<_> = [1, 2, 3, 4]                 // An array in row-major order
 ///     .chunks(2)                               // Only defined on slices and vectors
 ///     .composed(transpose)
@@ -55,7 +55,7 @@ pub fn transpose<'a, T: 'a + Copy>(iter: impl Iterator<Item = &'a [T]>) -> impl 
         .copied() // impl Iterator<Item = i32>
 }
 
-/// A compound function to be used with the [`crate::ComposedIterable::composed`] method that takes
+/// A compound function to be used with the [`crate::Composed::composed`] method that takes
 /// an additional single `usize` as a parameter and computes a window of that size for *every element*
 /// of the iterator (periodic).
 ///
@@ -65,7 +65,7 @@ pub fn transpose<'a, T: 'a + Copy>(iter: impl Iterator<Item = &'a [T]>) -> impl 
 /// ## Example
 ///
 /// ```
-/// # use kompost::{ComposedIterable, compounds::periodic_windows};
+/// # use kompost::{Composed, compounds::periodic_windows};
 /// let size=3;
 /// let x = [1, 2, 3, 4].into_iter()
 ///     .composed(|i| periodic_windows(3, i))

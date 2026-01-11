@@ -17,13 +17,17 @@
 * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+//! Iterator compositions needs its own implementation separate from anonymous iterators
+//! as each closure has its own type and hence, a constant closure cannot be used within the
+//! [Anonymous](crate::Anonymous) trait.
+
 use std::marker::PhantomData;
 
 /// Iterator that with a context and a closures called in the [`ComposedIterator::new`] and
-/// [`ComposedIterator::next`] methods. Used in the [`ComposedIterable`] trait.
+/// [`ComposedIterator::next`] methods. Used in the [`Composed`] trait.
 ///
 /// [`crate::anonymous::AnonymousIterator`] could not be used as a constant closure cannot be used within
-/// the implementation of [`ComposedIterable`].
+/// the implementation of [`Composed`].
 pub struct ComposedIterator<IterIn, IterOut, In, Out, Init>
 where
     Init: FnOnce(IterIn) -> IterOut,
@@ -65,7 +69,7 @@ where
         self.iter.next()
     }
 }
-pub trait ComposedIterable<IterIn, IterOut, In, Out, Init>
+pub trait Composed<IterIn, IterOut, In, Out, Init>
 where
     Init: FnOnce(IterIn) -> IterOut,
 
@@ -79,28 +83,10 @@ where
     ///
     /// * `init_fn`: The closure that receives the current [`IntoIterator`] and produces the initial
     ///   context.
-    ///
-    /// ## Examples
-    ///
-    /// ```
-    /// use kompost::ComposedIterable;
-    ///
-    /// fn favorite_pipeline(it: impl Iterator<Item = i32>) -> impl Iterator<Item = f64> {
-    ///     it.skip(5)
-    ///         .map(|x| x.pow(2))
-    ///         .take_while(|x| *x < 100)
-    ///         .map(|x| x as f64)
-    /// }
-    ///
-    /// assert_eq!(
-    ///     [1, 2, 3, 4, 5, 6, 7].into_iter().composed(favorite_pipeline).collect::<Vec<_>>(),
-    ///     vec![36.0f64, 49.0]
-    /// )
-    /// ```
     fn composed(self, init_fs: Init) -> ComposedIterator<IterIn, IterOut, In, Out, Init>;
 }
 
-impl<IterIn, IterOut, In, Out, Init> ComposedIterable<IterIn, IterOut, In, Out, Init> for IterIn
+impl<IterIn, IterOut, In, Out, Init> Composed<IterIn, IterOut, In, Out, Init> for IterIn
 where
     Init: FnOnce(IterIn) -> IterOut,
 

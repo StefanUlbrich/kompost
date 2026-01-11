@@ -23,6 +23,5 @@ pub mod anonymous;
 pub mod composed;
 pub mod compounds;
 
-pub use anonymous::AnonymouslyIterable;
-pub use composed::ComposedIterable;
-pub use compounds::transpose;
+pub use anonymous::Anonymous;
+pub use composed::Composed;
