@@ -1,8 +1,16 @@
 # Kompost
 
-> 🚧🚧🚧🚧🚧 **Under construction** 🚧🚧🚧🚧🚧
+> 🚧🚧🚧🚧🚧 **Warning: Under construction** but working (all examples are tested) 🚧🚧🚧🚧🚧
 >
-> Links only work in the [docs](https://stefanulbrich.github.io/kompost/kompost)
+
+Have you ever needed a specific method on an [`Iterator`] that just did not exist
+and is in [itertools]() and friends? Missing a `windows` or
+`cyclic_windows` maybe? This crate tries to help!
+
+To read the documentation with working links, see the
+[docs](https://stefanulbrich.github.io/kompost/kompost) which includes this readme.
+
+## Introduction
 
 A crate to ease functional programming in rust by facilitating
 the composability and re-usability of Iterator methods and anonymous
@@ -218,7 +226,12 @@ pub fn periodic_windows<T>(
 ```
 
 The compound function can then be easily applied but requires a closure to set the
-parameter. Functors can be considered to avoid this (rather small) inconvenience.
+parameter. The compound function can not return a closure (i.e., be a factory) easily
+as `impl` cannot be used as a return type of `FnOnce`—so the full type needs to be
+written down which is often cumbersome.
+
+Functors will be considered to avoid this (rather small) inconvenience.
+
 
 ```rust
 use kompost::*;

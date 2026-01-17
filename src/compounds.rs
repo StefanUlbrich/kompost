@@ -19,6 +19,7 @@
 
 use crate::Anonymous;
 
+// TODO rename to transpose_slices (including in the documentation!)
 /// Function to be used with the [`crate::Composed::composed`] method.
 /// It transposes an [`IntoIterator`] of [`std::slice`], a data structure often encountered
 /// when storing 2D arrays in a single (row-major) array.
@@ -55,6 +56,40 @@ pub fn transpose<'a, T: 'a + Copy>(iter: impl Iterator<Item = &'a [T]>) -> impl 
         .copied() // impl Iterator<Item = i32>
 }
 
+// TODO rename to transpose (the general version).
+/// TBD: Transpose over Iterable of Iterable
+///
+/// ```rust
+/// let a = [1, 2, 3];
+/// let b = [4, 5, 6];
+/// let c = [a.iter(), b.iter()];
+/// let d = c
+///     .into_iter()
+///     .composed(transpose2)
+///     .flatten()
+///     .collect::<Vec<_>>();
+/// assert_eq!(d, [1,4,2,5,3,6]);
+/// ```
+pub fn transpose2<T: Copy>(
+    iter: impl Iterator<Item = impl Iterator<Item = T>>,
+) -> impl Iterator<Item = impl Iterator<Item = T>> {
+    iter.into_iter().anonymous(
+        |rows| rows.collect::<Vec<_>>(),
+        |context| {
+            let transposed = context
+                .iter_mut()
+                .filter_map(Iterator::next)
+                .collect::<Vec<_>>();
+            if transposed.is_empty() {
+                None
+            } else {
+                Some(transposed.into_iter())
+            }
+        },
+    )
+}
+
+//TODO rename to cyclic_windows
 /// A compound function to be used with the [`crate::Composed::composed`] method that takes
 /// an additional single `usize` as a parameter and computes a window of that size for *every element*
 /// of the iterator (periodic).
