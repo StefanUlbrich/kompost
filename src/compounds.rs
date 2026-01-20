@@ -17,12 +17,16 @@
 * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-use crate::Anonymous;
+// TODO better name for compound
+//! Collection of compound method that useful (to me)
+use crate::{Anonymous, Composed};
 
 // TODO rename to transpose_slices (including in the documentation!)
+// Todo move all examples to the readme
 /// Function to be used with the [`crate::Composed::composed`] method.
 /// It transposes an [`IntoIterator`] of [`std::slice`], a data structure often encountered
-/// when storing 2D arrays in a single (row-major) array.
+/// when storing 2D arrays in a single (row-major) array and using
+/// [`chunks`](slice::chunks) for iteration
 ///
 /// ## Example
 ///
@@ -60,6 +64,9 @@ pub fn transpose<'a, T: 'a + Copy>(iter: impl Iterator<Item = &'a [T]>) -> impl 
 /// TBD: Transpose over Iterable of Iterable
 ///
 /// ```rust
+/// use kompost::*;
+/// use kompost::compounds::*;
+///
 /// let a = [1, 2, 3];
 /// let b = [4, 5, 6];
 /// let c = [a.iter(), b.iter()];
@@ -67,10 +74,11 @@ pub fn transpose<'a, T: 'a + Copy>(iter: impl Iterator<Item = &'a [T]>) -> impl 
 ///     .into_iter()
 ///     .composed(transpose2)
 ///     .flatten()
+///     .copied()
 ///     .collect::<Vec<_>>();
 /// assert_eq!(d, [1,4,2,5,3,6]);
 /// ```
-pub fn transpose2<T: Copy>(
+pub fn transpose2<T>(
     iter: impl Iterator<Item = impl Iterator<Item = T>>,
 ) -> impl Iterator<Item = impl Iterator<Item = T>> {
     iter.into_iter().anonymous(
@@ -129,4 +137,38 @@ pub fn periodic_windows<T>(
             }
         },
     )
+}
+
+//TODO move example to Readme and link to document
+/// Compound function to generate sliding windows over a 2D data structure
+/// in form of an [`Iterator`] over slices (such as returned by the [`chunks`](slice::chunks) method)
+/// See [this example](crate#complex-example section) for how to use it.
+pub fn window_2d_sliced<'a, T: 'a>(
+    it: impl ExactSizeIterator<Item = &'a [T]> + Clone,
+    size_m: usize,
+    size_n: usize,
+) -> impl Iterator<Item = impl Iterator<Item = impl Iterator<Item = impl Iterator<Item = &'a T>>>> {
+    it.composed(move |it| periodic_windows(size_m, it))
+        .map(move |rows| {
+            rows.map(move |row| {
+                row.into_iter()
+                    .composed(move |it| periodic_windows(size_n.clone(), it))
+            })
+            .composed(transpose2)
+        })
+}
+
+/// Compound function to generate sliding windows over a 2D data structure
+/// in form of an [`Iterator`] over [`Iterator`].
+/// See [this example](crate#complex-example section) for how to use it.
+pub fn window_2d<T>(
+    it: impl ExactSizeIterator<Item = impl ExactSizeIterator<Item = T> + Clone> + Clone,
+    size_m: usize,
+    size_n: usize,
+) -> impl Iterator<Item = impl Iterator<Item = impl Iterator<Item = impl Iterator<Item = T>>>> {
+    it.composed(move |it| periodic_windows(size_m, it))
+        .map(move |rows| {
+            rows.map(move |row| row.composed(move |it| periodic_windows(size_n.clone(), it)))
+                .composed(transpose2)
+        })
 }

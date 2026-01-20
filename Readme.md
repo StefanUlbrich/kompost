@@ -245,6 +245,68 @@ let x = [1, 2, 3, 4].into_iter()
 assert_eq!(x, [1,2,3,2,3,4,3,4,1,4,1,2])
 ```
 
+## Complex example
+
+Sliding windows over 2D arrays
+
+
+
+
+```rust
+use kompost::*;
+use kompost::compounds::*;
+let array_2d = [1, 2, 3, 4, 5, 6, 7, 8, 9].chunks(3);
+let r = array_2d
+    .composed(|it| window_2d_sliced(it, 2, 2))
+    .flatten()
+    .map(|window| window.flatten().copied().collect::<Vec<_>>());
+assert_eq!(
+    r.collect::<Vec<_>>(),
+    [
+        [1, 2, 4, 5],
+        [2, 3, 5, 6],
+        [3, 1, 6, 4],
+        [4, 5, 7, 8],
+        [5, 6, 8, 9],
+        [6, 4, 9, 7],
+        [7, 8, 1, 2],
+        [8, 9, 2, 3],
+        [9, 7, 3, 1],
+    ]
+);
+```
+
+And again more general, for [`Iterator`] of [`Iterator`]
+
+
+```rust
+use kompost::*;
+use kompost::compounds::*;
+let a = [1, 2, 3];
+let b = [4, 5, 6];
+let c = [7, 8, 9];
+let array_2d = [a.iter(), b.iter(), c.iter()];
+let r = array_2d
+    .into_iter()
+    .composed(|it| window_2d(it, 2, 2))
+    .flatten()
+    .map(|window| window.flatten().copied().collect::<Vec<_>>());
+assert_eq!(
+    r.collect::<Vec<_>>(),
+    [
+        [1, 2, 4, 5],
+        [2, 3, 5, 6],
+        [3, 1, 6, 4],
+        [4, 5, 7, 8],
+        [5, 6, 8, 9],
+        [6, 4, 9, 7],
+        [7, 8, 1, 2],
+        [8, 9, 2, 3],
+        [9, 7, 3, 1],
+    ]
+);
+```
+
 ## Acknowledgements
 
 **Made with 💙—not with AI.**
