@@ -8,9 +8,10 @@ and is absent in [itertools](https://docs.rs/itertools/latest/itertools/)
 and friends too? Missing a `windows` or
 `cyclic_windows` maybe? This crate tries to help!
 
-If enjoy working with as much as I do and want too organize iterator chains
+If enjoy working with iterators as much as I do and want to organize, bundle and test
+your iterator chains,
 and/or often find yourself having to write new iterators and the involved boiler
-plate, then this crate might be just right for you.
+plate, then this crate might be right for you.
 
 
 ## Introduction
@@ -253,28 +254,40 @@ assert_eq!(x, [1,2,3,2,3,4,3,4,1,4,1,2])
 
 ## Use Case: 2D sliding windows in Wave function collapse (WFC)
 
+The idea for this crate came to me when I was looking into
+[Wave Function Collapse (WFC)](https://github.com/mxgmn/WaveFunctionCollapse) out of curiosity.
+WFC is a cool algorithm to generate random output similar to a given input (typically, an image).
+It can be used to generate random level in video games or even act as a simple language model.
+As I struggled with the details, I had a look at the
+excellent and feature-complete Rust implementation [here](https://github.com/Elwqnn/wfc).
+It helped me understanding the subtleties of the algorithm I missed, but one implementation detail
+caught my eye. <!-- better -->
+By no means do I want to criticize the implementation, which is great—it's my tendency
+for over-engineering things. In the extraction of patterns in the sample, a sliding window
+over the sample image uses [four nested `for` loops and index magic](https://github.com/Elwqnn/wfc/blob/main/src/wfc.rs#L229-L238),
+and I wondered whether this part could be elegantly expressed in terms of Rust [Iterator]s. 
+To my surprise more complex than anticipated, and involved writing at least two new [Iterator]s resulting in a lot more boilerplate compared to
+the the pragmatic approach with loops. From this observation emerged the idea for this crate
+which hopefully helps in such situations.
 
-* Create evolved out of curiosity when looking at [WFC]()
-* Popular for generating random game levels 
-* To understand, looking at a [feature-complete rust implementation]()
-* Started with the extraction of patterns which involved 2D sliding windows
-* Solved with two nested for loops and complex (presumably difficult-to-debug) indexing magic.
-* By no means, do I want to criticize the implementation—it's my love for over-engineering
-* which urged me to see whether I can implement at least the (cyclic) 2D sliding windows with iterators and no indices only
-* To my surprise more complex than anticipated, and involved writing at least two new [Iterator]s and more boilerplate than
-* what the functional approach would. So, this crate emerged which facilitates dealing with such problems.
-* Eventually, the sliding windows can be formulated in a rather lean and elegant way that did not require any debugging(!)—
-  once it compiled (which took long enough), the results were correct.
-* Personally, I like the declarative solution and the breakdown into smaller, simple building blocks (such as the custom [transpose](crate::compounds::transpose)
-  and the [periodic_windows](crate::compounds::periodic_windows)), and I think is a  more natural way at looking at the algorithm
-  *  Start with a nested iteration (usually using [`chunks`](std::slice::[T]::chunks))
-  *  Generate a (cyclic) windows [`Iterator`] over the *outer* [`Iterator`] (rows in row-major)
-  *  For each of the iterables (i.e., [`slice`]s), generate cycling windows [`Iterator`]s
-     These iterate over columns (still in row-major).
-  *  As we want to group all the first elements of these column iterators and then the second elements and so on,
-     we need to [`transpose`](crate::compounds::transpose)  (this is the only not so intuitive step)
-* And that's it. The algorithm can easily be extended to more dimensions—3D, at least, still makes sense for
-  creating caves.
+Eventually, it turned out the sliding windows can be formulated in a rather lean and elegant way.
+I want to emphasize that did not require any debugging(!)—once it compiled (which took long enough), the results were correct.
+Manually dealing with indices is more error prone in my experience and might even lead to runtime out-of-bound errors.
+And personally, I simply prefer declarative solutions and the ability to breakdown the problem into smaller, simple and reusable
+building blocks (such as the custom [transpose](crate::compounds::transpose)
+and the [periodic_windows](crate::compounds::periodic_windows) methods). I think is just a  more natural take on the algorithm
+with simple steps:
+
+* Start with a nested iteration over the memory (usually using [`chunks(number_of_columns)`](std::slice::[T]::chunks) for row-major layouts)
+* Generate a (cyclic) windows [`Iterator`] over the *outer* [`Iterator`] (i.e., rows in row-major layouts)
+* For each of the inner iterables (i.e., [`slice`]s), generate cycling windows [`Iterator`]s
+  These then iterate over columns (for row-major layouts again).
+* As we want to group all the first elements of these column iterators, then the second elements, then the third elements and so on,
+  we need to [`transpose`](crate::compounds::transpose). This is the least obvious step.
+* We collect the results and that's it already. The algorithm can easily be extended to more dimensions—3D, at least, still makes sense for
+  creating cave systems and other volumetric structures.
+
+With the custom methods defined in the previous sections, this translates to:
 
 ```rust
 use kompost::*;
@@ -356,10 +369,9 @@ assert_eq!(
 );
 ```
 
-The WFC algorithm also requires collecting unique patterns among much more details such
-as storing adjacent patterns, symmetries and much more, which are out of context of
-this section.
-
+The WFC algorithm is of course, much more complex. It also requires finding *unique* patterns, adjacency relations between patterns,
+handling symmetries and much more, which are way of of context for this section. Uniqueness, however,
+is fun to integrate. With the help from a method from the [`itertools`](https://docs.rs/itertools/latest/itertools/) crate, this is already too easy.
 Uniqueness is achieved by ...
 
 ```rust
@@ -380,10 +392,11 @@ let r = array_2d
 assert_eq!(r.len(), 6);
 ```
 
-Very convenient! But we can achieve the same without [`itertools`](https://docs.rs/itertools/latest/itertools/)!
+How convenient! This is why [Iterator]s are so cool. Yet, we can achieve the same without using
+an external crate.
 The next lines generate a [`HashSet`](std::collections::HashSet) with unique patterns for
 each window over the rows. These can be collapsed into a final
-hashset that yields the unique patterns. 
+single hashset that yields the unique patterns. 
 
 ```rust
 use std::collections::HashSet;
@@ -409,12 +422,12 @@ let r = array_2d
 assert_eq!(r.len(), 6);
 ```
 
-It works but is more verbose and probably less efficient. However, as unique sets
+It works but is more verbose and probably even less efficient. However, as the unique sets
 are computed independently for each axis, we can consider parallelizing the computation!
 For higher dimensions or large arrays, this can lead to relevant performance improvements.
 
 [`Rayon`](https://docs.rs/rayon/latest/rayon/) is the first choice for parallelization in Rust and works well with concept of
-iteration. `Kompost` does not support rayon yet but this is the next milestone. 
+iteration. `Kompost` does not support rayon yet so this will be the next thing to do!
 
 ## Acknowledgements
 
