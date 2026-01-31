@@ -4,11 +4,14 @@
 >
 
 Have you ever needed a specific method on an [`Iterator`] that just did not exist
-and is in [itertools]() and friends? Missing a `windows` or
+and is absent in [itertools](https://docs.rs/itertools/latest/itertools/)
+and friends too? Missing a `windows` or
 `cyclic_windows` maybe? This crate tries to help!
 
-To read the documentation with working links, see the
-[docs](https://stefanulbrich.github.io/kompost/kompost) which includes this readme.
+If enjoy working with as much as I do and want too organize iterator chains
+and/or often find yourself having to write new iterators and the involved boiler
+plate, then this crate might be just right for you.
+
 
 ## Introduction
 
@@ -68,9 +71,10 @@ The main concepts are
     );
   ```
 
-  Full access to the iterator allows solving more complex tasks by means of functional programming without
-  having to write your own named Iterator and boilerplate such as related traits and blanket implementations.
-  This crate provides examples for [Iterator of Iterator transposition](crate::compounds::transpose)
+  Full access to the iterator allows solving more complex tasks by means of functional programming
+  without having to write your own named Iterator and boilerplate such as related traits and
+  blanket implementations. This crate provides examples for
+  [Iterator of Iterator transposition](crate::compounds::transpose)
   and [periodic_windows](crate::compounds::periodic_windows). More useful (read,
   useful to me) examples will be added with time.
 
@@ -79,7 +83,8 @@ The main concepts are
 Adding a method to [`Iterator`] requires boilerplate in Rust—just have a look
 at [`src/anonymous.rs`](https://github.com/StefanUlbrich/kompost/blob/main/src/anonymous.rs):
 
-- A Struct that holds a state between iterators. Typically, at least a reference to the calling [`Iterator`].
+- A Struct that holds a state between iterators. Typically, at least a reference to the
+  calling [`Iterator`].
 - A constructor for the struct.
 - The implementation of [`Iterator` ] for the struct
 - A trait that defines the method
@@ -174,7 +179,8 @@ let x: Vec<_> = [1, 2, 3, 4]                 // An array in row-major order
 assert_eq!(x, [1, 3, 2, 4]);
 ```
 
-This can be conveniently "bundled" in a compound function—[`transpose`](crate::compounds::transpose)
+This can be conveniently "bundled" in a compound function—
+[`transpose`](crate::compounds::transpose)
 to be used with the [`composed`](crate::Composed::composed) from this crate.
 
 ## Composed iterators (compound functions)
@@ -245,18 +251,59 @@ let x = [1, 2, 3, 4].into_iter()
 assert_eq!(x, [1,2,3,2,3,4,3,4,1,4,1,2])
 ```
 
-## Complex example
-
-Sliding windows over 2D arrays
+## Use Case: 2D sliding windows in Wave function collapse (WFC)
 
 
-
+* Create evolved out of curiosity when looking at [WFC]()
+* Popular for generating random game levels 
+* To understand, looking at a [feature-complete rust implementation]()
+* Started with the extraction of patterns which involved 2D sliding windows
+* Solved with two nested for loops and complex (presumably difficult-to-debug) indexing magic.
+* By no means, do I want to criticize the implementation—it's my love for over-engineering
+* which urged me to see whether I can implement at least the (cyclic) 2D sliding windows with iterators and no indices only
+* To my surprise more complex than anticipated, and involved writing at least two new [Iterator]s and more boilerplate than
+* what the functional approach would. So, this crate emerged which facilitates dealing with such problems.
+* Eventually, the sliding windows can be formulated in a rather lean and elegant way that did not require any debugging(!)—
+  once it compiled (which took long enough), the results were correct.
+* Personally, I like the declarative solution and the breakdown into smaller, simple building blocks (such as the custom [transpose](crate::compounds::transpose)
+  and the [periodic_windows](crate::compounds::periodic_windows)), and I think is a  more natural way at looking at the algorithm
+  *  Start with a nested iteration (usually using [`chunks`](std::slice::[T]::chunks))
+  *  Generate a (cyclic) windows [`Iterator`] over the *outer* [`Iterator`] (rows in row-major)
+  *  For each of the iterables (i.e., [`slice`]s), generate cycling windows [`Iterator`]s
+     These iterate over columns (still in row-major).
+  *  As we want to group all the first elements of these column iterators and then the second elements and so on,
+     we need to [`transpose`](crate::compounds::transpose)  (this is the only not so intuitive step)
+* And that's it. The algorithm can easily be extended to more dimensions—3D, at least, still makes sense for
+  creating caves.
 
 ```rust
 use kompost::*;
 use kompost::compounds::*;
-let array_2d = [1, 2, 3, 4, 5, 6, 7, 8, 9].chunks(3);
+
+let array_2d = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+let (size_m, size_n) = (2, 2);
+array_2d
+    .chunks(3).composed(move |it| periodic_windows(size_m, it))
+    .map(move |rows| {
+        rows.map(move |row| {
+            row.into_iter()
+                .composed(move |it| periodic_windows(size_n.clone(), it))
+        })
+        .composed(transpose2)
+    });
+    
+```
+
+This functionality is wrapped in the [`window_2d_sliced`](crate::compounds::window_2d_sliced) and [`window_2d`](crate::compounds::window_2d_sliced) compositions.
+It can be used on slices 
+
+```rust
+use kompost::*;
+use kompost::compounds::*;
+
+let array_2d = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let r = array_2d
+    .chunks(3)
     .composed(|it| window_2d_sliced(it, 2, 2))
     .flatten()
     .map(|window| window.flatten().copied().collect::<Vec<_>>());
@@ -274,14 +321,16 @@ assert_eq!(
         [9, 7, 3, 1],
     ]
 );
+
 ```
 
-And again more general, for [`Iterator`] of [`Iterator`]
+and, again more general, on [`Iterator`] of [`Iterator`]
 
 
 ```rust
 use kompost::*;
 use kompost::compounds::*;
+
 let a = [1, 2, 3];
 let b = [4, 5, 6];
 let c = [7, 8, 9];
@@ -306,6 +355,66 @@ assert_eq!(
     ]
 );
 ```
+
+The WFC algorithm also requires collecting unique patterns among much more details such
+as storing adjacent patterns, symmetries and much more, which are out of context of
+this section.
+
+Uniqueness is achieved by ...
+
+```rust
+use itertools::Itertools;
+use kompost::*;
+use kompost::compounds::*;
+
+let array_2d = [1, 1, 2, 1, 2, 1, 1, 1, 1];
+
+let r = array_2d
+    .chunks(3)
+    .composed(|it| window_2d_sliced(it, 2, 2))
+    .flatten()
+    .map(|window| window.flatten().copied().collect::<Vec<_>>())
+    .unique()
+    .collect::<Vec<_>>();
+
+assert_eq!(r.len(), 6);
+```
+
+Very convenient! But we can achieve the same without [`itertools`](https://docs.rs/itertools/latest/itertools/)!
+The next lines generate a [`HashSet`](std::collections::HashSet) with unique patterns for
+each window over the rows. These can be collapsed into a final
+hashset that yields the unique patterns. 
+
+```rust
+use std::collections::HashSet;
+use kompost::*;
+use kompost::compounds::*;
+
+let array_2d = [1, 1, 2, 1, 2, 1, 1, 1, 1];
+let r = array_2d
+    .chunks(3)
+    .composed(|it| window_2d_sliced(it, 2, 2))
+    .map(|row_window| {
+        HashSet::<Vec<i32>>::from_iter(
+            row_window.map(|window| window.flatten().copied().collect::<Vec<_>>()),
+        )
+    })
+    .reduce(|acc, set| {
+        let mut acc = acc.clone();
+        acc.extend(set);
+        acc.clone()
+    })
+    .unwrap();
+
+assert_eq!(r.len(), 6);
+```
+
+It works but is more verbose and probably less efficient. However, as unique sets
+are computed independently for each axis, we can consider parallelizing the computation!
+For higher dimensions or large arrays, this can lead to relevant performance improvements.
+
+[`Rayon`](https://docs.rs/rayon/latest/rayon/) is the first choice for parallelization in Rust and works well with concept of
+iteration. `Kompost` does not support rayon yet but this is the next milestone. 
 
 ## Acknowledgements
 
