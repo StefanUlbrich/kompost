@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["periodic_windows","transpose"]};
+window.SIDEBAR_ITEMS = {"fn":["circular_windows","circular_windows_2d","circular_windows_2d_slice","transpose","transpose_slice"]};
