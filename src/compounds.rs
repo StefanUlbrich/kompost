@@ -17,23 +17,30 @@
 * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-use crate::Anonymous;
+// TODO better name for compound
+//! Collection of compound method that useful (to me)
+use crate::{Anonymous, Composed};
 
+// TODO rename to transpose_slices (including in the documentation!)
+// Todo move all examples to the readme
 /// Function to be used with the [`crate::Composed::composed`] method.
 /// It transposes an [`IntoIterator`] of [`std::slice`], a data structure often encountered
-/// when storing 2D arrays in a single (row-major) array.
+/// when storing 2D arrays in a single (row-major) array and using
+/// [`chunks`](slice::chunks) for iteration
 ///
 /// ## Example
 ///
 /// ```
-/// # use kompost::{Composed, compounds::transpose};
+/// # use kompost::{Composed, compounds::transpose_slice};
 /// let x: Vec<_> = [1, 2, 3, 4]                 // An array in row-major order
 ///     .chunks(2)                               // Only defined on slices and vectors
-///     .composed(transpose)
+///     .composed(transpose_slice)
 ///     .collect();
 /// assert_eq!(x, [1, 3, 2, 4]);
 /// ```
-pub fn transpose<'a, T: 'a + Copy>(iter: impl Iterator<Item = &'a [T]>) -> impl Iterator<Item = T> {
+pub fn transpose_slice<'a, T: 'a + Copy>(
+    iter: impl Iterator<Item = &'a [T]>,
+) -> impl Iterator<Item = T> {
     iter.into_iter()
         .anonymous(
             |chunks| chunks.map(|row| row.iter()).collect::<Vec<_>>(),
@@ -55,9 +62,46 @@ pub fn transpose<'a, T: 'a + Copy>(iter: impl Iterator<Item = &'a [T]>) -> impl 
         .copied() // impl Iterator<Item = i32>
 }
 
+// TODO rename to transpose (the general version).
+/// TBD: Transpose over Iterable of Iterable
+///
+/// ```rust
+/// use kompost::*;
+/// use kompost::compounds::*;
+///
+/// let a = [1, 2, 3];
+/// let b = [4, 5, 6];
+/// let c = [a.iter(), b.iter()];
+/// let d = c
+///     .into_iter()
+///     .composed(transpose)
+///     .flatten()
+///     .copied()
+///     .collect::<Vec<_>>();
+/// assert_eq!(d, [1,4,2,5,3,6]);
+/// ```
+pub fn transpose<T>(
+    iter: impl Iterator<Item = impl Iterator<Item = T>>,
+) -> impl Iterator<Item = impl Iterator<Item = T>> {
+    iter.into_iter().anonymous(
+        |rows| rows.collect::<Vec<_>>(),
+        |context| {
+            let transposed = context
+                .iter_mut()
+                .filter_map(Iterator::next)
+                .collect::<Vec<_>>();
+            if transposed.is_empty() {
+                None
+            } else {
+                Some(transposed.into_iter())
+            }
+        },
+    )
+}
+
 /// A compound function to be used with the [`crate::Composed::composed`] method that takes
 /// an additional single `usize` as a parameter and computes a window of that size for *every element*
-/// of the iterator (periodic).
+/// of the iterator (circular, it takes elements from the beginning for later windows).
 ///
 /// This is requires to write an additional closure when it is used, but this might change in the future
 /// when a functor trait might be written instead.
@@ -65,15 +109,15 @@ pub fn transpose<'a, T: 'a + Copy>(iter: impl Iterator<Item = &'a [T]>) -> impl 
 /// ## Example
 ///
 /// ```
-/// # use kompost::{Composed, compounds::periodic_windows};
+/// # use kompost::{Composed, compounds::circular_windows};
 /// let size=3;
 /// let x = [1, 2, 3, 4].into_iter()
-///     .composed(|i| periodic_windows(3, i))
+///     .composed(|i| circular_windows(3, i))
 ///     .flatten()
 ///     .collect::<Vec<_>>();
 /// assert_eq!(x, [1,2,3,2,3,4,3,4,1,4,1,2])
 /// ```
-pub fn periodic_windows<T>(
+pub fn circular_windows<T>(
     size: usize,
     it: impl ExactSizeIterator<Item = T> + Clone,
 ) -> impl Iterator<Item = impl Iterator<Item = T>> {
@@ -94,4 +138,38 @@ pub fn periodic_windows<T>(
             }
         },
     )
+}
+
+//TODO move example to Readme and link to document
+/// Compound function to generate circular sliding windows over a 2D data structure
+/// in form of an [`Iterator`] over slices (such as returned by the [`chunks`](slice::chunks) method)
+/// See [this example](crate#complex-example section) for how to use it.
+pub fn circular_windows_2d_slice<'a, T: 'a>(
+    it: impl ExactSizeIterator<Item = &'a [T]> + Clone,
+    size_m: usize,
+    size_n: usize,
+) -> impl Iterator<Item = impl Iterator<Item = impl Iterator<Item = impl Iterator<Item = &'a T>>>> {
+    it.composed(move |it| circular_windows(size_m, it))
+        .map(move |rows| {
+            rows.map(move |row| {
+                row.into_iter()
+                    .composed(move |it| circular_windows(size_n.clone(), it))
+            })
+            .composed(transpose)
+        })
+}
+
+/// Compound function to generate circular sliding windows over a 2D data structure
+/// in form of an [`Iterator`] over [`Iterator`].
+/// See [this example](crate#complex-example section) for how to use it.
+pub fn circular_windows_2d<T>(
+    it: impl ExactSizeIterator<Item = impl ExactSizeIterator<Item = T> + Clone> + Clone,
+    size_m: usize,
+    size_n: usize,
+) -> impl Iterator<Item = impl Iterator<Item = impl Iterator<Item = impl Iterator<Item = T>>>> {
+    it.composed(move |it| circular_windows(size_m, it))
+        .map(move |rows| {
+            rows.map(move |row| row.composed(move |it| circular_windows(size_n.clone(), it)))
+                .composed(transpose)
+        })
 }
