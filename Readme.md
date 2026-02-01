@@ -184,6 +184,31 @@ This can be conveniently "bundled" in a compound function—
 [`transpose`](crate::compounds::transpose)
 to be used with the [`composed`](crate::Composed::composed) from this crate.
 
+**Note:** You can even use the anonymous iterator to write [`Iterator`]s that
+generate output. Might come in handy until
+[generators](https://dev-doc.rust-lang.org/beta/unstable-book/language-features/generators.html)
+end in stable:
+
+```rust
+use kompost::*;
+use std::iter::repeat;
+
+// We need an iterator to start with. An array with an empty type `()` should work
+let x = [()]
+    .iter()
+    .anonymous(|_| [1, 2, 3].into_iter(), |it| it.next())
+    .collect::<Vec<_>>();
+assert_eq!(x, [1, 2, 3]);
+
+
+// Alternatively, we can save the `iter()` line above by using `repeat`.
+// That's another `use` though
+let x = repeat(())
+    .anonymous(|_| [1, 2, 3].into_iter(), |it| it.next())
+    .collect::<Vec<_>>();
+assert_eq!(x, [1, 2, 3]);
+```
+
 ## Composed iterators (compound functions)
 
 Iterator composition allows defining reusable groups of frequently used combinations of
