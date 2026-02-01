@@ -21,7 +21,7 @@
 
 pub mod anonymous;
 pub mod composed;
-pub mod compounds;
+pub mod composite;
 
 pub use anonymous::Anonymous;
 pub use composed::Composed;

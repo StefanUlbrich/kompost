@@ -17,8 +17,8 @@
 * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-// TODO better name for compound
-//! Collection of compound method that useful (to me)
+// TODO better name for composite
+//! Collection of composite  method that useful (to me)
 use crate::{Anonymous, Composed};
 
 // TODO rename to transpose_slices (including in the documentation!)
@@ -31,7 +31,7 @@ use crate::{Anonymous, Composed};
 /// ## Example
 ///
 /// ```
-/// # use kompost::{Composed, compounds::transpose_slice};
+/// # use kompost::{Composed, composite::transpose_slice};
 /// let x: Vec<_> = [1, 2, 3, 4]                 // An array in row-major order
 ///     .chunks(2)                               // Only defined on slices and vectors
 ///     .composed(transpose_slice)
@@ -67,7 +67,7 @@ pub fn transpose_slice<'a, T: 'a + Copy>(
 ///
 /// ```rust
 /// use kompost::*;
-/// use kompost::compounds::*;
+/// use kompost::composite::*;
 ///
 /// let a = [1, 2, 3];
 /// let b = [4, 5, 6];
@@ -99,7 +99,7 @@ pub fn transpose<T>(
     )
 }
 
-/// A compound function to be used with the [`crate::Composed::composed`] method that takes
+/// A composite  function to be used with the [`crate::Composed::composed`] method that takes
 /// an additional single `usize` as a parameter and computes a window of that size for *every element*
 /// of the iterator (circular, it takes elements from the beginning for later windows).
 ///
@@ -109,7 +109,7 @@ pub fn transpose<T>(
 /// ## Example
 ///
 /// ```
-/// # use kompost::{Composed, compounds::circular_windows};
+/// # use kompost::{Composed, composite::circular_windows};
 /// let size=3;
 /// let x = [1, 2, 3, 4].into_iter()
 ///     .composed(|i| circular_windows(3, i))
@@ -141,7 +141,7 @@ pub fn circular_windows<T>(
 }
 
 //TODO move example to Readme and link to document
-/// Compound function to generate circular sliding windows over a 2D data structure
+/// composite  function to generate circular sliding windows over a 2D data structure
 /// in form of an [`Iterator`] over slices (such as returned by the [`chunks`](slice::chunks) method)
 /// See [this example](crate#complex-example section) for how to use it.
 pub fn circular_windows_2d_slice<'a, T: 'a>(
@@ -159,7 +159,7 @@ pub fn circular_windows_2d_slice<'a, T: 'a>(
         })
 }
 
-/// Compound function to generate circular sliding windows over a 2D data structure
+/// composite  function to generate circular sliding windows over a 2D data structure
 /// in form of an [`Iterator`] over [`Iterator`].
 /// See [this example](crate#complex-example section) for how to use it.
 pub fn circular_windows_2d<T>(

@@ -75,8 +75,8 @@ The main concepts are
   Full access to the iterator allows solving more complex tasks by means of functional programming
   without having to write your own named Iterator and boilerplate such as related traits and
   blanket implementations. This crate provides examples for
-  [Iterator of Iterator transposition](crate::compounds::transpose)
-  and [circular_windows](crate::compounds::circular_windows). More useful (read,
+  [Iterator of Iterator transposition](crate::composite::transpose)
+  and [circular_windows](crate::composite::circular_windows). More useful (read,
   useful to me) examples will be added with time.
 
 ## Anonymous iterators
@@ -180,8 +180,8 @@ let x: Vec<_> = [1, 2, 3, 4]                 // An array in row-major order
 assert_eq!(x, [1, 3, 2, 4]);
 ```
 
-This can be conveniently "bundled" in a compound function—
-[`transpose`](crate::compounds::transpose)
+This can be conveniently "bundled" in a composite function—
+[`transpose`](crate::composite::transpose)
 to be used with the [`composed`](crate::Composed::composed) from this crate.
 
 **Note:** You can even use the anonymous iterator to write [`Iterator`]s that
@@ -209,7 +209,7 @@ let x = repeat(())
 assert_eq!(x, [1, 2, 3]);
 ```
 
-## Composed iterators (compound functions)
+## Composed iterators (composite functions)
 
 Iterator composition allows defining reusable groups of frequently used combinations of
 [`Iterator`] methods (such as `map` or `scan`) that can be easily tested. Therefore,
@@ -219,12 +219,12 @@ the second closure parameter.
 
 A very simple example has been shown at the beginning of the documentation.
 
-`Kompost` comes with a few useful (at least to me), predefined compound functions such as
-[`transpose`](crate::compounds::transpose)
+`Kompost` comes with a few useful (at least to me), predefined composite functions such as
+[`transpose`](crate::composite::transpose)
 (wrapping the code above) and
-[`circular_windows`](crate::compounds::circular_windows).
+[`circular_windows`](crate::composite::circular_windows).
 
-The latter demonstrates a few interesting aspects: How a compound function can accept an
+The latter demonstrates a few interesting aspects: How a composite function can accept an
 additional parameter (window size), how more narrow type restrictions can be enforced
 (i.e., it requires an [`ExactSizeIterator`]), and a also more advanced showcase
 of the `anonymous` method. It's worth to have a closer look at its (rather compact)
@@ -257,8 +257,8 @@ pub fn circular_windows<T>(
 }
 ```
 
-The compound function can then be easily applied but requires a closure to set the
-parameter. The compound function can not return a closure (i.e., be a factory) easily
+The composite function can then be easily applied but requires a closure to set the
+parameter. The composite function can not return a closure (i.e., be a factory) easily
 as `impl` cannot be used as a return type of `FnOnce`—so the full type needs to be
 written down which is often cumbersome.
 
@@ -267,7 +267,7 @@ Functors will be considered to avoid this (rather small) inconvenience.
 
 ```rust
 use kompost::*;
-use kompost::compounds::*;
+use kompost::composite::*;
 
 let size=3;
 let x = [1, 2, 3, 4].into_iter()
@@ -299,8 +299,8 @@ Eventually, it turned out the sliding windows can be formulated in a rather lean
 I want to emphasize that did not require any debugging(!)—once it compiled (which took long enough), the results were correct.
 Manually dealing with indices is more error prone in my experience and might even lead to runtime out-of-bound errors.
 And personally, I simply prefer declarative solutions and the ability to breakdown the problem into smaller, simple and reusable
-building blocks (such as the custom [transpose](crate::compounds::transpose)
-and the [circular_windows](crate::compounds::circular_windows) methods). I think is just a  more natural take on the algorithm
+building blocks (such as the custom [transpose](crate::composite::transpose)
+and the [circular_windows](crate::composite::circular_windows) methods). I think is just a  more natural take on the algorithm
 with simple steps:
 
 * Start with a nested iteration over the memory (usually using [`chunks(number_of_columns)`](std::slice::[T]::chunks) for row-major layouts)
@@ -308,7 +308,7 @@ with simple steps:
 * For each of the inner iterables (i.e., [`slice`]s), generate cycling windows [`Iterator`]s
   These then iterate over columns (for row-major layouts again).
 * As we want to group all the first elements of these column iterators, then the second elements, then the third elements and so on,
-  we need to [`transpose`](crate::compounds::transpose). This is the least obvious step.
+  we need to [`transpose`](crate::composite::transpose). This is the least obvious step.
 * We collect the results and that's it already. The algorithm can easily be extended to more dimensions—3D, at least, still makes sense for
   creating cave systems and other volumetric structures.
 
@@ -316,7 +316,7 @@ With the custom methods defined in the previous sections, this translates to:
 
 ```rust
 use kompost::*;
-use kompost::compounds::*;
+use kompost::composite::*;
 
 let array_2d = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let (size_m, size_n) = (2, 2);
@@ -332,12 +332,12 @@ array_2d
     
 ```
 
-This functionality is wrapped in the [`circular_windows_2d_slice`](crate::compounds::circular_windows_2d_slice) and [`window_2d`](crate::compounds::circular_windows_2d_slice) compositions.
+This functionality is wrapped in the [`circular_windows_2d_slice`](crate::composite::circular_windows_2d_slice) and [`window_2d`](crate::composite::circular_windows_2d_slice) compositions.
 It can be used on slices 
 
 ```rust
 use kompost::*;
-use kompost::compounds::*;
+use kompost::composite::*;
 
 let array_2d = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let r = array_2d
@@ -367,7 +367,7 @@ and, again more general, on [`Iterator`] of [`Iterator`]
 
 ```rust
 use kompost::*;
-use kompost::compounds::*;
+use kompost::composite::*;
 
 let a = [1, 2, 3];
 let b = [4, 5, 6];
@@ -402,7 +402,7 @@ Uniqueness is achieved by ...
 ```rust
 use itertools::Itertools;
 use kompost::*;
-use kompost::compounds::*;
+use kompost::composite::*;
 
 let array_2d = [1, 1, 2, 1, 2, 1, 1, 1, 1];
 
@@ -426,7 +426,7 @@ single hashset that yields the unique patterns.
 ```rust
 use std::collections::HashSet;
 use kompost::*;
-use kompost::compounds::*;
+use kompost::composite::*;
 
 let array_2d = [1, 1, 2, 1, 2, 1, 1, 1, 1];
 let r = array_2d
