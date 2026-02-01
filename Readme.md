@@ -6,7 +6,7 @@
 Have you ever needed a specific method on an [`Iterator`] that just did not exist
 and is absent in [itertools](https://docs.rs/itertools/latest/itertools/)
 and friends too? Missing a `windows` or
-`cyclic_windows` maybe? This crate tries to help!
+`circular_windows` maybe? This crate tries to help!
 
 If enjoy working with iterators as much as I do and want to organize, bundle and test
 your iterator chains,
@@ -76,7 +76,7 @@ The main concepts are
   without having to write your own named Iterator and boilerplate such as related traits and
   blanket implementations. This crate provides examples for
   [Iterator of Iterator transposition](crate::compounds::transpose)
-  and [periodic_windows](crate::compounds::periodic_windows). More useful (read,
+  and [circular_windows](crate::compounds::circular_windows). More useful (read,
   useful to me) examples will be added with time.
 
 ## Anonymous iterators
@@ -222,7 +222,7 @@ A very simple example has been shown at the beginning of the documentation.
 `Kompost` comes with a few useful (at least to me), predefined compound functions such as
 [`transpose`](crate::compounds::transpose)
 (wrapping the code above) and
-[`periodic_windows`](crate::compounds::periodic_windows).
+[`circular_windows`](crate::compounds::circular_windows).
 
 The latter demonstrates a few interesting aspects: How a compound function can accept an
 additional parameter (window size), how more narrow type restrictions can be enforced
@@ -233,7 +233,7 @@ code:
 ```rust
 use kompost::*;
 
-pub fn periodic_windows<T>(
+pub fn circular_windows<T>(
     size: usize,
     it: impl ExactSizeIterator<Item = T> + Clone,
 ) -> impl Iterator<Item = impl Iterator<Item = T>> {
@@ -271,7 +271,7 @@ use kompost::compounds::*;
 
 let size=3;
 let x = [1, 2, 3, 4].into_iter()
-    .composed(|i| periodic_windows(3, i))
+    .composed(|i| circular_windows(3, i))
     .flatten()
     .collect::<Vec<_>>();
 assert_eq!(x, [1,2,3,2,3,4,3,4,1,4,1,2])
@@ -300,11 +300,11 @@ I want to emphasize that did not require any debugging(!)—once it compiled (wh
 Manually dealing with indices is more error prone in my experience and might even lead to runtime out-of-bound errors.
 And personally, I simply prefer declarative solutions and the ability to breakdown the problem into smaller, simple and reusable
 building blocks (such as the custom [transpose](crate::compounds::transpose)
-and the [periodic_windows](crate::compounds::periodic_windows) methods). I think is just a  more natural take on the algorithm
+and the [circular_windows](crate::compounds::circular_windows) methods). I think is just a  more natural take on the algorithm
 with simple steps:
 
 * Start with a nested iteration over the memory (usually using [`chunks(number_of_columns)`](std::slice::[T]::chunks) for row-major layouts)
-* Generate a (cyclic) windows [`Iterator`] over the *outer* [`Iterator`] (i.e., rows in row-major layouts)
+* Generate a (circular) windows [`Iterator`] over the *outer* [`Iterator`] (i.e., rows in row-major layouts)
 * For each of the inner iterables (i.e., [`slice`]s), generate cycling windows [`Iterator`]s
   These then iterate over columns (for row-major layouts again).
 * As we want to group all the first elements of these column iterators, then the second elements, then the third elements and so on,
@@ -321,18 +321,18 @@ use kompost::compounds::*;
 let array_2d = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let (size_m, size_n) = (2, 2);
 array_2d
-    .chunks(3).composed(move |it| periodic_windows(size_m, it))
+    .chunks(3).composed(move |it| circular_windows(size_m, it))
     .map(move |rows| {
         rows.map(move |row| {
             row.into_iter()
-                .composed(move |it| periodic_windows(size_n.clone(), it))
+                .composed(move |it| circular_windows(size_n.clone(), it))
         })
-        .composed(transpose2)
+        .composed(transpose)
     });
     
 ```
 
-This functionality is wrapped in the [`window_2d_sliced`](crate::compounds::window_2d_sliced) and [`window_2d`](crate::compounds::window_2d_sliced) compositions.
+This functionality is wrapped in the [`circular_windows_2d_slice`](crate::compounds::circular_windows_2d_slice) and [`window_2d`](crate::compounds::circular_windows_2d_slice) compositions.
 It can be used on slices 
 
 ```rust
@@ -342,7 +342,7 @@ use kompost::compounds::*;
 let array_2d = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let r = array_2d
     .chunks(3)
-    .composed(|it| window_2d_sliced(it, 2, 2))
+    .composed(|it| circular_windows_2d_slice(it, 2, 2))
     .flatten()
     .map(|window| window.flatten().copied().collect::<Vec<_>>());
 assert_eq!(
@@ -375,7 +375,7 @@ let c = [7, 8, 9];
 let array_2d = [a.iter(), b.iter(), c.iter()];
 let r = array_2d
     .into_iter()
-    .composed(|it| window_2d(it, 2, 2))
+    .composed(|it| circular_windows_2d(it, 2, 2))
     .flatten()
     .map(|window| window.flatten().copied().collect::<Vec<_>>());
 assert_eq!(
@@ -408,7 +408,7 @@ let array_2d = [1, 1, 2, 1, 2, 1, 1, 1, 1];
 
 let r = array_2d
     .chunks(3)
-    .composed(|it| window_2d_sliced(it, 2, 2))
+    .composed(|it| circular_windows_2d_slice(it, 2, 2))
     .flatten()
     .map(|window| window.flatten().copied().collect::<Vec<_>>())
     .unique()
@@ -431,7 +431,7 @@ use kompost::compounds::*;
 let array_2d = [1, 1, 2, 1, 2, 1, 1, 1, 1];
 let r = array_2d
     .chunks(3)
-    .composed(|it| window_2d_sliced(it, 2, 2))
+    .composed(|it| circular_windows_2d_slice(it, 2, 2))
     .map(|row_window| {
         HashSet::<Vec<i32>>::from_iter(
             row_window.map(|window| window.flatten().copied().collect::<Vec<_>>()),
