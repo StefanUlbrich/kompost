@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Kompost"><title>kompost - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="kompost" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.0 (254b59607 2026-01-19)" data-channel="1.93.0" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../static.files/storage-e2aeef58.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Crate kompost</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../kompost/index.html">kompost</a><span class="version">0.0.3</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#kompost" title="Kompost">Kompost</a><ul><li><a href="#introduction" title="Introduction">Introduction</a></li><li><a href="#anonymous-iterators" title="Anonymous iterators">Anonymous iterators</a></li><li><a href="#composed-iterators-compound-functions" title="Composed iterators (compound functions)">Composed iterators (compound functions)</a></li><li><a href="#use-case-2d-sliding-windows-in-wave-function-collapse-wfc" title="Use Case: 2D sliding windows in Wave function collapse (WFC)">Use Case: 2D sliding windows in Wave function collapse (WFC)</a></li><li><a href="#acknowledgements" title="Acknowledgements">Acknowledgements</a></li></ul></li></ul><h3><a href="#reexports">Crate Items</a></h3><ul class="block"><li><a href="#reexports" title="Re-exports">Re-exports</a></li><li><a href="#modules" title="Modules">Modules</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>kompost</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/kompost/lib.rs.html#20-27">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="kompost"><a class="doc-anchor" href="#kompost">§</a>Kompost</h2>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Kompost"><title>kompost - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="kompost" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.0 (254b59607 2026-01-19)" data-channel="1.93.0" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../static.files/storage-e2aeef58.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Crate kompost</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../kompost/index.html">kompost</a><span class="version">0.0.3</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#kompost" title="Kompost">Kompost</a><ul><li><a href="#introduction" title="Introduction">Introduction</a></li><li><a href="#anonymous-iterators" title="Anonymous iterators">Anonymous iterators</a></li><li><a href="#composed-iterators-composite-functions" title="Composed iterators (composite functions)">Composed iterators (composite functions)</a></li><li><a href="#use-case-2d-sliding-windows-in-wave-function-collapse-wfc" title="Use Case: 2D sliding windows in Wave function collapse (WFC)">Use Case: 2D sliding windows in Wave function collapse (WFC)</a></li><li><a href="#acknowledgements" title="Acknowledgements">Acknowledgements</a></li></ul></li></ul><h3><a href="#reexports">Crate Items</a></h3><ul class="block"><li><a href="#reexports" title="Re-exports">Re-exports</a></li><li><a href="#modules" title="Modules">Modules</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>kompost</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/kompost/lib.rs.html#20-27">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="kompost"><a class="doc-anchor" href="#kompost">§</a>Kompost</h2>
 <blockquote>
 <p>🚧🚧🚧🚧🚧 <strong>Warning: Under construction</strong> but working (all examples are tested) 🚧🚧🚧🚧🚧</p>
 </blockquote>
@@ -64,8 +64,8 @@ as an anonymous function:</p>
 <p>Full access to the iterator allows solving more complex tasks by means of functional programming
 without having to write your own named Iterator and boilerplate such as related traits and
 blanket implementations. This crate provides examples for
-<a href="compounds/fn.transpose.html" title="fn kompost::compounds::transpose">Iterator of Iterator transposition</a>
-and <a href="compounds/fn.circular_windows.html" title="fn kompost::compounds::circular_windows">circular_windows</a>. More useful (read,
+<a href="composite/fn.transpose.html" title="fn kompost::composite::transpose">Iterator of Iterator transposition</a>
+and <a href="composite/fn.circular_windows.html" title="fn kompost::composite::circular_windows">circular_windows</a>. More useful (read,
 useful to me) examples will be added with time.</p>
 </li>
 </ul>
@@ -158,8 +158,8 @@ hints as shown by <a href="https://rust-analyzer.github.io/">rust-analyzer lsp</
     </span>.copied()                                <span class="comment">// impl Iterator&lt;Item = i32&gt;
     </span>.collect();
 <span class="macro">assert_eq!</span>(x, [<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>]);</code></pre></div>
-<p>This can be conveniently “bundled” in a compound function—
-<a href="compounds/fn.transpose.html" title="fn kompost::compounds::transpose"><code>transpose</code></a>
+<p>This can be conveniently “bundled” in a composite function—
+<a href="composite/fn.transpose.html" title="fn kompost::composite::transpose"><code>transpose</code></a>
 to be used with the <a href="composed/trait.Composed.html#tymethod.composed" title="method kompost::composed::Composed::composed"><code>composed</code></a> from this crate.</p>
 <p><strong>Note:</strong> You can even use the anonymous iterator to write <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>s that
 generate output. Might come in handy until
@@ -182,18 +182,18 @@ end in stable:</p>
 </span><span class="kw">let </span>x = repeat(())
     .anonymous(|<span class="kw">_</span>| [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].into_iter(), |it| it.next())
     .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-<span class="macro">assert_eq!</span>(x, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);</code></pre></div><h3 id="composed-iterators-compound-functions"><a class="doc-anchor" href="#composed-iterators-compound-functions">§</a>Composed iterators (compound functions)</h3>
+<span class="macro">assert_eq!</span>(x, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);</code></pre></div><h3 id="composed-iterators-composite-functions"><a class="doc-anchor" href="#composed-iterators-composite-functions">§</a>Composed iterators (composite functions)</h3>
 <p>Iterator composition allows defining reusable groups of frequently used combinations of
 <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> methods (such as <code>map</code> or <code>scan</code>) that can be easily tested. Therefore,
 a method <a href="composed/trait.Composed.html#tymethod.composed" title="method kompost::composed::Composed::composed"><code>composed</code></a> is provided. Its
 signature the same as <a href="anonymous/trait.Anonymous.html#tymethod.anonymous" title="method kompost::anonymous::Anonymous::anonymous"><code>anonymous</code></a> minus
 the second closure parameter.</p>
 <p>A very simple example has been shown at the beginning of the documentation.</p>
-<p><code>Kompost</code> comes with a few useful (at least to me), predefined compound functions such as
-<a href="compounds/fn.transpose.html" title="fn kompost::compounds::transpose"><code>transpose</code></a>
+<p><code>Kompost</code> comes with a few useful (at least to me), predefined composite functions such as
+<a href="composite/fn.transpose.html" title="fn kompost::composite::transpose"><code>transpose</code></a>
 (wrapping the code above) and
-<a href="compounds/fn.circular_windows.html" title="fn kompost::compounds::circular_windows"><code>circular_windows</code></a>.</p>
-<p>The latter demonstrates a few interesting aspects: How a compound function can accept an
+<a href="composite/fn.circular_windows.html" title="fn kompost::composite::circular_windows"><code>circular_windows</code></a>.</p>
+<p>The latter demonstrates a few interesting aspects: How a composite function can accept an
 additional parameter (window size), how more narrow type restrictions can be enforced
 (i.e., it requires an <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/exact_size/trait.ExactSizeIterator.html" title="trait core::iter::traits::exact_size::ExactSizeIterator"><code>ExactSizeIterator</code></a>), and a also more advanced showcase
 of the <code>anonymous</code> method. It’s worth to have a closer look at its (rather compact)
@@ -223,14 +223,14 @@ code:</p>
         },
     )
 }</code></pre></div>
-<p>The compound function can then be easily applied but requires a closure to set the
-parameter. The compound function can not return a closure (i.e., be a factory) easily
+<p>The composite function can then be easily applied but requires a closure to set the
+parameter. The composite function can not return a closure (i.e., be a factory) easily
 as <code>impl</code> cannot be used as a return type of <code>FnOnce</code>—so the full type needs to be
 written down which is often cumbersome.</p>
 <p>Functors will be considered to avoid this (rather small) inconvenience.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
-<span class="kw">use </span>kompost::compounds::<span class="kw-2">*</span>;
+<span class="kw">use </span>kompost::composite::<span class="kw-2">*</span>;
 
 <span class="kw">let </span>size=<span class="number">3</span>;
 <span class="kw">let </span>x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>].into_iter()
@@ -257,8 +257,8 @@ which hopefully helps in such situations.</p>
 I want to emphasize that did not require any debugging(!)—once it compiled (which took long enough), the results were correct.
 Manually dealing with indices is more error prone in my experience and might even lead to runtime out-of-bound errors.
 And personally, I simply prefer declarative solutions and the ability to breakdown the problem into smaller, simple and reusable
-building blocks (such as the custom <a href="compounds/fn.transpose.html" title="fn kompost::compounds::transpose">transpose</a>
-and the <a href="compounds/fn.circular_windows.html" title="fn kompost::compounds::circular_windows">circular_windows</a> methods). I think is just a  more natural take on the algorithm
+building blocks (such as the custom <a href="composite/fn.transpose.html" title="fn kompost::composite::transpose">transpose</a>
+and the <a href="composite/fn.circular_windows.html" title="fn kompost::composite::circular_windows">circular_windows</a> methods). I think is just a  more natural take on the algorithm
 with simple steps:</p>
 <ul>
 <li>Start with a nested iteration over the memory (usually using <a href="std::slice::%5BT%5D::chunks"><code>chunks(number_of_columns)</code></a> for row-major layouts)</li>
@@ -266,14 +266,14 @@ with simple steps:</p>
 <li>For each of the inner iterables (i.e., <a href="https://doc.rust-lang.org/1.93.0/std/primitive.slice.html" title="primitive slice"><code>slice</code></a>s), generate cycling windows <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>s
 These then iterate over columns (for row-major layouts again).</li>
 <li>As we want to group all the first elements of these column iterators, then the second elements, then the third elements and so on,
-we need to <a href="compounds/fn.transpose.html" title="fn kompost::compounds::transpose"><code>transpose</code></a>. This is the least obvious step.</li>
+we need to <a href="composite/fn.transpose.html" title="fn kompost::composite::transpose"><code>transpose</code></a>. This is the least obvious step.</li>
 <li>We collect the results and that’s it already. The algorithm can easily be extended to more dimensions—3D, at least, still makes sense for
 creating cave systems and other volumetric structures.</li>
 </ul>
 <p>With the custom methods defined in the previous sections, this translates to:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
-<span class="kw">use </span>kompost::compounds::<span class="kw-2">*</span>;
+<span class="kw">use </span>kompost::composite::<span class="kw-2">*</span>;
 
 <span class="kw">let </span>array_2d = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>];
 <span class="kw">let </span>(size_m, size_n) = (<span class="number">2</span>, <span class="number">2</span>);
@@ -287,11 +287,11 @@ array_2d
         .composed(transpose)
     });
     </code></pre></div>
-<p>This functionality is wrapped in the <a href="compounds/fn.circular_windows_2d_slice.html" title="fn kompost::compounds::circular_windows_2d_slice"><code>circular_windows_2d_slice</code></a> and <a href="compounds/fn.circular_windows_2d_slice.html" title="fn kompost::compounds::circular_windows_2d_slice"><code>window_2d</code></a> compositions.
+<p>This functionality is wrapped in the <a href="composite/fn.circular_windows_2d_slice.html" title="fn kompost::composite::circular_windows_2d_slice"><code>circular_windows_2d_slice</code></a> and <a href="composite/fn.circular_windows_2d_slice.html" title="fn kompost::composite::circular_windows_2d_slice"><code>window_2d</code></a> compositions.
 It can be used on slices</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
-<span class="kw">use </span>kompost::compounds::<span class="kw-2">*</span>;
+<span class="kw">use </span>kompost::composite::<span class="kw-2">*</span>;
 
 <span class="kw">let </span>array_2d = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>];
 <span class="kw">let </span>r = array_2d
@@ -317,7 +317,7 @@ It can be used on slices</p>
 <p>and, again more general, on <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> of <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a></p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
-<span class="kw">use </span>kompost::compounds::<span class="kw-2">*</span>;
+<span class="kw">use </span>kompost::composite::<span class="kw-2">*</span>;
 
 <span class="kw">let </span>a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];
 <span class="kw">let </span>b = [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>];
@@ -349,7 +349,7 @@ Uniqueness is achieved by …</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
 <span class="kw">use </span>kompost::<span class="kw-2">*</span>;
-<span class="kw">use </span>kompost::compounds::<span class="kw-2">*</span>;
+<span class="kw">use </span>kompost::composite::<span class="kw-2">*</span>;
 
 <span class="kw">let </span>array_2d = [<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>];
 
@@ -370,7 +370,7 @@ single hashset that yields the unique patterns.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::collections::HashSet;
 <span class="kw">use </span>kompost::<span class="kw-2">*</span>;
-<span class="kw">use </span>kompost::compounds::<span class="kw-2">*</span>;
+<span class="kw">use </span>kompost::composite::<span class="kw-2">*</span>;
 
 <span class="kw">let </span>array_2d = [<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>];
 <span class="kw">let </span>r = array_2d
@@ -401,4 +401,4 @@ iteration. <code>Kompost</code> does not support rayon yet so this will be the n
 <a href="https://dystroy.org/bacon/">bacon</a></p>
 </div></details><h2 id="reexports" class="section-header">Re-exports<a href="#reexports" class="anchor">§</a></h2><dl class="item-table reexports"><dt id="reexport.Anonymous"><code>pub use anonymous::<a class="trait" href="anonymous/trait.Anonymous.html" title="trait kompost::anonymous::Anonymous">Anonymous</a>;</code></dt><dt id="reexport.Composed"><code>pub use composed::<a class="trait" href="composed/trait.Composed.html" title="trait kompost::composed::Composed">Composed</a>;</code></dt></dl><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><dl class="item-table"><dt><a class="mod" href="anonymous/index.html" title="mod kompost::anonymous">anonymous</a></dt><dt><a class="mod" href="composed/index.html" title="mod kompost::composed">composed</a></dt><dd>Iterator compositions needs its own implementation separate from anonymous iterators
 as each closure has its own type and hence, a constant closure cannot be used within the
-<a href="anonymous/trait.Anonymous.html" title="trait kompost::anonymous::Anonymous">Anonymous</a> trait.</dd><dt><a class="mod" href="compounds/index.html" title="mod kompost::compounds">compounds</a></dt><dd>Collection of compound method that useful (to me)</dd></dl></section></div></main></body></html>
+<a href="anonymous/trait.Anonymous.html" title="trait kompost::anonymous::Anonymous">Anonymous</a> trait.</dd><dt><a class="mod" href="composite/index.html" title="mod kompost::composite">composite</a></dt><dd>Collection of composite  method that useful (to me)</dd></dl></section></div></main></body></html>

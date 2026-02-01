@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["anonymous","composed","compounds"]};
+window.SIDEBAR_ITEMS = {"mod":["anonymous","composed","composite"]};
