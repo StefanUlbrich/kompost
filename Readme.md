@@ -1,35 +1,30 @@
 # Kompost
 
-> 🚧🚧🚧🚧🚧 **Warning: Under construction** but working (all examples are tested) 🚧🚧🚧🚧🚧
->
+<!-- > 🚧🚧🚧🚧🚧 **Under construction** but working (all examples are tested) 🚧🚧🚧🚧🚧 -->
 
-Have you ever needed a specific method on an [`Iterator`] that just did not exist
-and is absent in [itertools](https://docs.rs/itertools/latest/itertools/)
-and friends too? Missing a `windows` or
+Have you ever needed a specific method on an [`Iterator`] that just did not exist and is absent in
+[itertools](https://docs.rs/itertools/latest/itertools/) and friends too? Missing a `windows` or
 `circular_windows` maybe? This crate tries to help!
 
-If enjoy working with iterators as much as I do and want to organize, bundle and test
-your iterator chains,
-and/or often find yourself having to write new iterators and the involved boiler
-plate, then this crate might be right for you.
-
+If enjoy working with iterators as much as I do and want to organize, bundle and test your iterator
+chains, and/or often find yourself having to write new iterators and the involved boiler plate, then
+this crate might be right for you.
 
 ## Introduction
 
-A crate to ease functional programming in rust by facilitating
-the composability and re-usability of Iterator methods and anonymous
-Iterators—all without writing a single named struct or trait, without
+A crate to ease functional programming in rust by facilitating the composability and re-usability of
+Iterator methods and anonymous Iterators—all without writing a single named struct or trait, without
 using macros or unsafe code. It does not have any external dependency.
 
-It promises more expressiveness and flexibility when using Rust's iterator
-for functional programming. Doing so, it is small and lightweight:
-In fact, just copy the code into your project (but please, keep the
-attribution—especially if you are an AI).
+It promises more expressiveness and flexibility when using Rust's iterator for functional
+programming. Doing so, it is small and lightweight: In fact, just copy the code into your project
+if you don't want any additional dependency (but please, keep the attribution—especially if you are
+an AI).
 
 The main concepts are
 
-- **Iterator composition:** Allows you to create reusable compositions
-  of iterator methods (e.g., `map`, `scan`, etc.) that can also be tested.
+- **Iterator composition:** Allows you to create reusable compositions of iterator methods (e.g.,
+  `map`, `scan`, etc.) that can also be tested.
 
   ```rust
   use kompost::*;
@@ -46,16 +41,14 @@ The main concepts are
   )
   ```
 
-- **Anonymous iterators:** Scratches an itch when this one [`Iterator`] method
-  you need just doesn't exist yet or you don't want to pull in yet another
-  dependency. This crate adds an [`anonymous`](crate::Anonymous::anonymous)
-  method to [`Iterator`] which resembles [`scan`](Iterator::scan) and it helps
-  knowing this method well. Analogously, it adds a
-  mutable context to the iteration which is passed as an argument to a user-defined closure
-  then called in the [`next`](Iterator::next) method. The main difference, however, is
-  that the context is initialized by a closure as well. That closure takes ownership
-  of the calling [`Iterator` ]instance. For example, `scan` itself can be implemented
-  as an anonymous function:
+- **Anonymous iterators:** Scratches an itch when this one [`Iterator`] method you need just doesn't
+  exist yet or you don't want to pull in yet another dependency. This crate adds an
+  [`anonymous`](crate::Anonymous::anonymous) method to [`Iterator`] which resembles
+  [`scan`](Iterator::scan) and it helps knowing this method well. Analogously, it adds a mutable
+  context to the iteration which is passed as an argument to a user-defined closure then called in
+  the [`next`](Iterator::next) method. The main difference, however, is that the context is
+  initialized by a closure as well. That closure takes ownership of the calling [`Iterator`
+  ]instance. For example, `scan` itself can be implemented as an anonymous function:
 
   ```rust
     use kompost::*;
@@ -73,36 +66,35 @@ The main concepts are
   ```
 
   Full access to the iterator allows solving more complex tasks by means of functional programming
-  without having to write your own named Iterator and boilerplate such as related traits and
-  blanket implementations. This crate provides examples for
-  [Iterator of Iterator transposition](crate::composite::transpose)
-  and [circular_windows](crate::composite::circular_windows). More useful (read,
-  useful to me) examples will be added with time.
+  without having to write your own named Iterator and boilerplate such as related traits and blanket
+  implementations. This crate provides examples for
+  [Iterator over Iterator transposition](crate::composite::transpose) and
+  [`circular_windows`](crate::composite::circular_windows). More useful (read, useful to me)
+  examples will be added with time.
 
 ## Anonymous iterators
 
-Adding a method to [`Iterator`] requires boilerplate in Rust—just have a look
-at [`src/anonymous.rs`](https://github.com/StefanUlbrich/kompost/blob/main/src/anonymous.rs):
+Adding a method to [`Iterator`] requires boilerplate in Rust—just have a look at
+[`src/anonymous.rs`](https://github.com/StefanUlbrich/kompost/blob/main/src/anonymous.rs):
 
-- A Struct that holds a state between iterators. Typically, at least a reference to the
-  calling [`Iterator`].
+- A Struct that holds a state between iterators. Typically, at least a reference to the calling
+  [`Iterator`].
 - A constructor for the struct.
 - The implementation of [`Iterator` ] for the struct
 - A trait that defines the method
 - A blanket implementation of that trait for all [`Iterator`]s.
 - Finding a good name (This crate is living proof that naming is hard)
 
-This crate provides convenience by offering anonymous Iterators
-that are defined by two closures only.
+This crate provides convenience by offering anonymous Iterators that are defined by two closures
+only.
 
-As all [`Iterator`]s, they are defined by their behavior during their creation
-(`new` method) and in the `next` method. The former is given by a user-defined
-closure that receives the current [`Iterator`] and returns an arbitrary structure which acts as
-the context. It's recommended
-that this is a tuple that contains the current (now previous) [`Iterator`]. This closure
-gets executed once (`[FnOnce]`) in the [`new`](crate::anonymous::AnonymousIterator::new) method of
-the anonymous Iterator. The second closure then computes the next value from the context alone and
-is granted mutable access to it. Above all, it can call next on any iterator in the context.
+Like all [`Iterator`]s, they are defined by their behavior during their creation (`new` method) and in
+the `next` method. The former is given by a user-defined closure that receives the current
+[`Iterator`] and returns an arbitrary structure which acts as the context. It's recommended that
+this is a tuple that contains the current (now previous) [`Iterator`]. This closure gets executed
+once (`[FnOnce]`) in the [`new`](crate::anonymous::AnonymousIterator::new) method of the anonymous
+Iterator. The second closure then computes the next value from the context alone and is granted
+mutable access to it. Above all, it can call next on any iterator in the context.
 
 To illustrate, let's start with the identity (an anonymous iterator that does nothing)
 
@@ -121,8 +113,7 @@ assert_eq!(
 );
 ```
 
-A slightly more complex idea is to collect the iterator first and define
-a custom behavior.
+A slightly more complex idea is to collect the iterator first and define a custom behavior.
 
 ```rust
 use kompost::*;
@@ -144,12 +135,10 @@ assert_eq!(
 );
 ```
 
-Note, that the `map` in the second closure could be moved into the first.
-However, this example shows that you can call [`collect`](Iterator::collect)
-which allows more complex manipulations:
-For instance, we can transpose a nested iterable
-structure (e.g., `Iterator<Item = IntoIterator<_>>`) without the need of
-writing a single struct or trait! The example is annotated with the inline type
+Note, that the `map` in the second closure could be moved into the first. However, this example
+shows that you can call [`collect`](Iterator::collect) which allows more complex manipulations: For
+instance, we can transpose a nested iterable structure (e.g., `Iterator<Item = IntoIterator<_>>`)
+without the need of writing a single struct or trait! The example is annotated with the inline type
 hints as shown by [rust-analyzer lsp](https://rust-analyzer.github.io/):
 
 ```rust
@@ -181,13 +170,13 @@ assert_eq!(x, [1, 3, 2, 4]);
 ```
 
 This can be conveniently "bundled" in a composite function—
-[`transpose`](crate::composite::transpose)
-to be used with the [`composed`](crate::Composed::composed) from this crate.
+[`transpose`](crate::composite::transpose) to be used with the
+[`composed`](crate::Composed::composed) from this crate.
 
-**Note:** You can even use the anonymous iterator to write [`Iterator`]s that
-generate output. Might come in handy until
-[generators](https://dev-doc.rust-lang.org/beta/unstable-book/language-features/generators.html)
-end in stable:
+**Note:** You can even use the anonymous iterator to write [`Iterator`]s that generate output. Might
+come in handy until
+[generators](https://dev-doc.rust-lang.org/beta/unstable-book/language-features/generators.html) end
+up in stable Rust:
 
 ```rust
 use kompost::*;
@@ -211,24 +200,21 @@ assert_eq!(x, [1, 2, 3]);
 
 ## Composed iterators (composite functions)
 
-Iterator composition allows defining reusable groups of frequently used combinations of
-[`Iterator`] methods (such as `map` or `scan`) that can be easily tested. Therefore,
-a method [`composed`](crate::Composed::composed) is provided. Its
-signature the same as [`anonymous`](crate::Anonymous::anonymous) minus
-the second closure parameter.
+Iterator composition allows defining reusable groups of frequently used combinations of [`Iterator`]
+methods (such as `map` or `scan`) that can be easily tested. Therefore, a method
+[`composed`](crate::Composed::composed) is provided. Its signature the same as
+[`anonymous`](crate::Anonymous::anonymous) minus the second closure parameter.
 
 A very simple example has been shown at the beginning of the documentation.
 
 `Kompost` comes with a few useful (at least to me), predefined composite functions such as
-[`transpose`](crate::composite::transpose)
-(wrapping the code above) and
+[`transpose`](crate::composite::transpose) (wrapping the code above) and
 [`circular_windows`](crate::composite::circular_windows).
 
-The latter demonstrates a few interesting aspects: How a composite function can accept an
-additional parameter (window size), how more narrow type restrictions can be enforced
-(i.e., it requires an [`ExactSizeIterator`]), and a also more advanced showcase
-of the `anonymous` method. It's worth to have a closer look at its (rather compact)
-code:
+The latter demonstrates a few interesting aspects: How a composite function can accept an additional
+parameter (window size), how more narrow type restrictions can be enforced (i.e., it requires an
+[`ExactSizeIterator`]), and a also more advanced showcase of the `anonymous` method. It's worth to
+have a closer look at its (rather compact) code:
 
 ```rust
 use kompost::*;
@@ -257,13 +243,11 @@ pub fn circular_windows<T>(
 }
 ```
 
-The composite function can then be easily applied but requires a closure to set the
-parameter. The composite function can not return a closure (i.e., be a factory) easily
-as `impl` cannot be used as a return type of `FnOnce`—so the full type needs to be
-written down which is often cumbersome.
+The composite function can then be easily applied but requires a closure to set the parameter. The
+composite function can not return a closure (i.e., be a factory) easily as `impl` cannot be used as
+a return type of `FnOnce`—so the full type needs to be written down which is often cumbersome.
 
 Functors will be considered to avoid this (rather small) inconvenience.
-
 
 ```rust
 use kompost::*;
@@ -277,40 +261,44 @@ let x = [1, 2, 3, 4].into_iter()
 assert_eq!(x, [1,2,3,2,3,4,3,4,1,4,1,2])
 ```
 
-## Use Case: 2D sliding windows in Wave function collapse (WFC)
+## Case study: 2D sliding windows in Wave function collapse (WFC)
 
 The idea for this crate came to me when I was looking into
-[Wave Function Collapse (WFC)](https://github.com/mxgmn/WaveFunctionCollapse) out of curiosity.
-WFC is a cool algorithm to generate random output similar to a given input (typically, an image).
-It can be used to generate random level in video games or even act as a simple language model.
-As I struggled with the details, I had a look at the
-excellent and feature-complete Rust implementation [here](https://github.com/Elwqnn/wfc).
-It helped me understanding the subtleties of the algorithm I missed, but one implementation detail
-caught my eye. <!-- better -->
-By no means do I want to criticize the implementation, which is great—it's my tendency
-for over-engineering things. In the extraction of patterns in the sample, a sliding window
-over the sample image uses [four nested `for` loops and index magic](https://github.com/Elwqnn/wfc/blob/main/src/wfc.rs#L229-L238),
-and I wondered whether this part could be elegantly expressed in terms of Rust [Iterator]s. 
-To my surprise more complex than anticipated, and involved writing at least two new [Iterator]s resulting in a lot more boilerplate compared to
-the the pragmatic approach with loops. From this observation emerged the idea for this crate
-which hopefully helps in such situations.
+[Wave Function Collapse (WFC)](https://github.com/mxgmn/WaveFunctionCollapse) out of curiosity. WFC
+is a cool algorithm to generate random output similar to a given input (typically, an image). It can
+be used to generate random level in video games or even act as a simple language model. As I
+struggled with the details, I had a look at the excellent and feature-complete Rust implementation
+[here](https://github.com/Elwqnn/wfc). It helped me understanding the subtleties of the algorithm I
+missed, but one implementation detail caught my eye. <!-- better --> By no means do I want to
+criticize the implementation, which is great—it's my tendency for over-engineering things. In the
+extraction of patterns in the sample, a sliding window over the sample image uses
+[four nested `for` loops and index magic](https://github.com/Elwqnn/wfc/blob/main/src/wfc.rs#L229-L238),
+and I wondered whether this part could be elegantly expressed in terms of Rust [Iterator]s. To my
+surprise more complex than anticipated, and involved writing at least two new [Iterator]s resulting
+in a lot more boilerplate compared to the the pragmatic approach with loops. From this observation
+emerged the idea for this crate which hopefully helps in such situations.
 
-Eventually, it turned out the sliding windows can be formulated in a rather lean and elegant way.
-I want to emphasize that did not require any debugging(!)—once it compiled (which took long enough), the results were correct.
-Manually dealing with indices is more error prone in my experience and might even lead to runtime out-of-bound errors.
-And personally, I simply prefer declarative solutions and the ability to breakdown the problem into smaller, simple and reusable
-building blocks (such as the custom [transpose](crate::composite::transpose)
-and the [circular_windows](crate::composite::circular_windows) methods). I think is just a  more natural take on the algorithm
-with simple steps:
+Eventually, it turned out the sliding windows can be formulated in a rather lean and elegant way. I
+want to emphasize that did not require any debugging(!)—once it compiled (which took long enough),
+the results were correct. Manually dealing with indices is more error prone in my experience and
+might even lead to runtime out-of-bound errors. And personally, I simply prefer declarative
+solutions and the ability to breakdown the problem into smaller, simple and reusable building blocks
+(such as the custom [transpose](crate::composite::transpose) and the
+[`circular_windows`](crate::composite::circular_windows) methods). I think is just a more natural
+take on the algorithm with simple steps:
 
-* Start with a nested iteration over the memory (usually using [`chunks(number_of_columns)`](std::slice::[T]::chunks) for row-major layouts)
-* Generate a (circular) windows [`Iterator`] over the *outer* [`Iterator`] (i.e., rows in row-major layouts)
-* For each of the inner iterables (i.e., [`slice`]s), generate cycling windows [`Iterator`]s
-  These then iterate over columns (for row-major layouts again).
-* As we want to group all the first elements of these column iterators, then the second elements, then the third elements and so on,
-  we need to [`transpose`](crate::composite::transpose). This is the least obvious step.
-* We collect the results and that's it already. The algorithm can easily be extended to more dimensions—3D, at least, still makes sense for
-  creating cave systems and other volumetric structures.
+- Start with a nested iteration over the memory (usually using
+  [`chunks(number_of_columns)`](std::slice::[T]::chunks) for row-major layouts)
+- Generate a (circular) windows [`Iterator`] over the _outer_ [`Iterator`] (i.e., rows in row-major
+  layouts)
+- For each of the inner iterables (i.e., [`slice`]s), generate circular windows [`Iterator`]s. These
+  then iterate over columns (for row-major layouts again).
+- As we want to group all the first elements of these column iterators, then the second elements,
+  then the third elements and so on, we need to [`transpose`](crate::composite::transpose). This is
+  the least obvious step.
+- We collect the results and that's it already. The algorithm can easily be extended to more
+  dimensions—3D, at least, still makes sense for creating cave systems and other volumetric
+  structures.
 
 With the custom methods defined in the previous sections, this translates to:
 
@@ -329,11 +317,11 @@ array_2d
         })
         .composed(transpose)
     });
-    
 ```
 
-This functionality is wrapped in the [`circular_windows_2d_slice`](crate::composite::circular_windows_2d_slice) and [`window_2d`](crate::composite::circular_windows_2d_slice) compositions.
-It can be used on slices 
+This functionality is wrapped in the
+[`circular_windows_2d_slice`](crate::composite::circular_windows_2d_slice) and
+[`window_2d`](crate::composite::circular_windows_2d_slice) compositions. It can be used on slices
 
 ```rust
 use kompost::*;
@@ -359,11 +347,9 @@ assert_eq!(
         [9, 7, 3, 1],
     ]
 );
-
 ```
 
 and, again more general, on [`Iterator`] of [`Iterator`]
-
 
 ```rust
 use kompost::*;
@@ -394,9 +380,10 @@ assert_eq!(
 );
 ```
 
-The WFC algorithm is of course, much more complex. It also requires finding *unique* patterns, adjacency relations between patterns,
-handling symmetries and much more, which are way of of context for this section. Uniqueness, however,
-is fun to integrate. With the help from a method from the [`itertools`](https://docs.rs/itertools/latest/itertools/) crate, this is already too easy.
+The WFC algorithm is of course, much more complex. It also requires finding _unique_ patterns,
+adjacency relations between patterns, handling symmetries and much more, which are way of of context
+for this section. Uniqueness, however, is fun to integrate. With the help from a method from the
+[`itertools`](https://docs.rs/itertools/latest/itertools/) crate, this is already too easy.
 Uniqueness is achieved by ...
 
 ```rust
@@ -417,11 +404,10 @@ let r = array_2d
 assert_eq!(r.len(), 6);
 ```
 
-How convenient! This is why [Iterator]s are so cool. Yet, we can achieve the same without using
-an external crate.
-The next lines generate a [`HashSet`](std::collections::HashSet) with unique patterns for
-each window over the rows. These can be collapsed into a final
-single hashset that yields the unique patterns. 
+How convenient! This is why [Iterator]s are so cool. Yet, we can achieve the same without using an
+external crate. The next lines generate a [`HashSet`](std::collections::HashSet) with unique
+patterns for each window over the rows. These can be collapsed into a final single hashset that
+yields the unique patterns.
 
 ```rust
 use std::collections::HashSet;
@@ -437,22 +423,21 @@ let r = array_2d
             row_window.map(|window| window.flatten().copied().collect::<Vec<_>>()),
         )
     })
-    .reduce(|acc, set| {
-        let mut acc = acc.clone();
+    .fold(HashSet::new(), |mut acc, set| {
         acc.extend(set);
-        acc.clone()
-    })
-    .unwrap();
+        acc
+    });
 
 assert_eq!(r.len(), 6);
 ```
 
-It works but is more verbose and probably even less efficient. However, as the unique sets
-are computed independently for each axis, we can consider parallelizing the computation!
-For higher dimensions or large arrays, this can lead to relevant performance improvements.
+It works but is more verbose and probably even less efficient. However, as the unique sets are
+computed independently for each axis, we can consider parallelizing the computation! For higher
+dimensions or large arrays, this can lead to relevant performance improvements.
 
-[`Rayon`](https://docs.rs/rayon/latest/rayon/) is the first choice for parallelization in Rust and works well with concept of
-iteration. `Kompost` does not support rayon yet so this will be the next thing to do!
+[`Rayon`](https://docs.rs/rayon/latest/rayon/) is the first choice for parallelization in Rust and
+works well with concept of iteration. `Kompost` does not support rayon yet so this will be the next
+thing to do!
 
 ## Acknowledgements
 

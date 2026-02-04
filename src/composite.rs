@@ -83,9 +83,8 @@ pub fn transpose_slice<'a, T: 'a + Copy>(
 pub fn transpose<T>(
     iter: impl Iterator<Item = impl Iterator<Item = T>>,
 ) -> impl Iterator<Item = impl Iterator<Item = T>> {
-    iter.into_iter().anonymous(
-        |rows| rows.collect::<Vec<_>>(),
-        |context| {
+    iter.into_iter()
+        .anonymous(std::iter::Iterator::collect::<Vec<_>>, |context| {
             let transposed = context
                 .iter_mut()
                 .filter_map(Iterator::next)
@@ -95,8 +94,7 @@ pub fn transpose<T>(
             } else {
                 Some(transposed.into_iter())
             }
-        },
-    )
+        })
 }
 
 /// A composite  function to be used with the [`crate::Composed::composed`] method that takes
@@ -151,11 +149,8 @@ pub fn circular_windows_2d_slice<'a, T: 'a>(
 ) -> impl Iterator<Item = impl Iterator<Item = impl Iterator<Item = impl Iterator<Item = &'a T>>>> {
     it.composed(move |it| circular_windows(size_m, it))
         .map(move |rows| {
-            rows.map(move |row| {
-                row.into_iter()
-                    .composed(move |it| circular_windows(size_n.clone(), it))
-            })
-            .composed(transpose)
+            rows.map(move |row| row.iter().composed(move |it| circular_windows(size_n, it)))
+                .composed(transpose)
         })
 }
 
@@ -169,7 +164,7 @@ pub fn circular_windows_2d<T>(
 ) -> impl Iterator<Item = impl Iterator<Item = impl Iterator<Item = impl Iterator<Item = T>>>> {
     it.composed(move |it| circular_windows(size_m, it))
         .map(move |rows| {
-            rows.map(move |row| row.composed(move |it| circular_windows(size_n.clone(), it)))
+            rows.map(move |row| row.composed(move |it| circular_windows(size_n, it)))
                 .composed(transpose)
         })
 }
