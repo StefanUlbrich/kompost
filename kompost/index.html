@@ -1,29 +1,23 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Kompost"><title>kompost - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="kompost" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.0 (254b59607 2026-01-19)" data-channel="1.93.0" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../static.files/storage-e2aeef58.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Crate kompost</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../kompost/index.html">kompost</a><span class="version">0.0.3</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#kompost" title="Kompost">Kompost</a><ul><li><a href="#introduction" title="Introduction">Introduction</a></li><li><a href="#anonymous-iterators" title="Anonymous iterators">Anonymous iterators</a></li><li><a href="#composed-iterators-composite-functions" title="Composed iterators (composite functions)">Composed iterators (composite functions)</a></li><li><a href="#use-case-2d-sliding-windows-in-wave-function-collapse-wfc" title="Use Case: 2D sliding windows in Wave function collapse (WFC)">Use Case: 2D sliding windows in Wave function collapse (WFC)</a></li><li><a href="#acknowledgements" title="Acknowledgements">Acknowledgements</a></li></ul></li></ul><h3><a href="#reexports">Crate Items</a></h3><ul class="block"><li><a href="#reexports" title="Re-exports">Re-exports</a></li><li><a href="#modules" title="Modules">Modules</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>kompost</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/kompost/lib.rs.html#20-27">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="kompost"><a class="doc-anchor" href="#kompost">§</a>Kompost</h2>
-<blockquote>
-<p>🚧🚧🚧🚧🚧 <strong>Warning: Under construction</strong> but working (all examples are tested) 🚧🚧🚧🚧🚧</p>
-</blockquote>
-<p>Have you ever needed a specific method on an <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> that just did not exist
-and is absent in <a href="https://docs.rs/itertools/latest/itertools/">itertools</a>
-and friends too? Missing a <code>windows</code> or
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Kompost"><title>kompost - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="kompost" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.0 (254b59607 2026-01-19)" data-channel="1.93.0" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../static.files/storage-e2aeef58.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-044be391.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Crate kompost</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../kompost/index.html">kompost</a><span class="version">0.0.4</span></h2></div><div class="sidebar-elems"><ul class="block"><li><a id="all-types" href="all.html">All Items</a></li></ul><section id="rustdoc-toc"><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#kompost" title="Kompost">Kompost</a><ul><li><a href="#introduction" title="Introduction">Introduction</a></li><li><a href="#anonymous-iterators" title="Anonymous iterators">Anonymous iterators</a></li><li><a href="#composed-iterators-composite-functions" title="Composed iterators (composite functions)">Composed iterators (composite functions)</a></li><li><a href="#case-study-2d-sliding-windows-in-wave-function-collapse-wfc" title="Case study: 2D sliding windows in Wave function collapse (WFC)">Case study: 2D sliding windows in Wave function collapse (WFC)</a></li><li><a href="#acknowledgements" title="Acknowledgements">Acknowledgements</a></li></ul></li></ul><h3><a href="#reexports">Crate Items</a></h3><ul class="block"><li><a href="#reexports" title="Re-exports">Re-exports</a></li><li><a href="#modules" title="Modules">Modules</a></li></ul></section><div id="rustdoc-modnav"></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><h1>Crate <span>kompost</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/kompost/lib.rs.html#20-27">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="kompost"><a class="doc-anchor" href="#kompost">§</a>Kompost</h2><!-- > 🚧🚧🚧🚧🚧 **Under construction** but working (all examples are tested) 🚧🚧🚧🚧🚧 -->
+<p>Have you ever needed a specific method on an <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> that just did not exist and is absent in
+<a href="https://docs.rs/itertools/latest/itertools/">itertools</a> and friends too? Missing a <code>windows</code> or
 <code>circular_windows</code> maybe? This crate tries to help!</p>
-<p>If enjoy working with iterators as much as I do and want to organize, bundle and test
-your iterator chains,
-and/or often find yourself having to write new iterators and the involved boiler
-plate, then this crate might be right for you.</p>
+<p>If enjoy working with iterators as much as I do and want to organize, bundle and test your iterator
+chains, and/or often find yourself having to write new iterators and the involved boiler plate, then
+this crate might be right for you.</p>
 <h3 id="introduction"><a class="doc-anchor" href="#introduction">§</a>Introduction</h3>
-<p>A crate to ease functional programming in rust by facilitating
-the composability and re-usability of Iterator methods and anonymous
-Iterators—all without writing a single named struct or trait, without
+<p>A crate to ease functional programming in rust by facilitating the composability and re-usability of
+Iterator methods and anonymous Iterators—all without writing a single named struct or trait, without
 using macros or unsafe code. It does not have any external dependency.</p>
-<p>It promises more expressiveness and flexibility when using Rust’s iterator
-for functional programming. Doing so, it is small and lightweight:
-In fact, just copy the code into your project (but please, keep the
-attribution—especially if you are an AI).</p>
+<p>It promises more expressiveness and flexibility when using Rust’s iterator for functional
+programming. Doing so, it is small and lightweight: In fact, just copy the code into your project
+if you don’t want any additional dependency (but please, keep the attribution—especially if you are
+an AI).</p>
 <p>The main concepts are</p>
 <ul>
 <li>
-<p><strong>Iterator composition:</strong> Allows you to create reusable compositions
-of iterator methods (e.g., <code>map</code>, <code>scan</code>, etc.) that can also be tested.</p>
+<p><strong>Iterator composition:</strong> Allows you to create reusable compositions of iterator methods (e.g.,
+<code>map</code>, <code>scan</code>, etc.) that can also be tested.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
 
@@ -38,16 +32,14 @@ of iterator methods (e.g., <code>map</code>, <code>scan</code>, etc.) that can a
     <span class="macro">vec!</span>[<span class="number">36.0f64</span>, <span class="number">49.0</span>]
 )</code></pre></div></li>
 <li>
-<p><strong>Anonymous iterators:</strong> Scratches an itch when this one <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> method
-you need just doesn’t exist yet or you don’t want to pull in yet another
-dependency. This crate adds an <a href="anonymous/trait.Anonymous.html#tymethod.anonymous" title="method kompost::anonymous::Anonymous::anonymous"><code>anonymous</code></a>
-method to <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> which resembles <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html#method.scan" title="method core::iter::traits::iterator::Iterator::scan"><code>scan</code></a> and it helps
-knowing this method well. Analogously, it adds a
-mutable context to the iteration which is passed as an argument to a user-defined closure
-then called in the <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html#tymethod.next" title="method core::iter::traits::iterator::Iterator::next"><code>next</code></a> method. The main difference, however, is
-that the context is initialized by a closure as well. That closure takes ownership
-of the calling <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code> </a>instance. For example, <code>scan</code> itself can be implemented
-as an anonymous function:</p>
+<p><strong>Anonymous iterators:</strong> Scratches an itch when this one <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> method you need just doesn’t
+exist yet or you don’t want to pull in yet another dependency. This crate adds an
+<a href="anonymous/trait.Anonymous.html#tymethod.anonymous" title="method kompost::anonymous::Anonymous::anonymous"><code>anonymous</code></a> method to <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> which resembles
+<a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html#method.scan" title="method core::iter::traits::iterator::Iterator::scan"><code>scan</code></a> and it helps knowing this method well. Analogously, it adds a mutable
+context to the iteration which is passed as an argument to a user-defined closure then called in
+the <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html#tymethod.next" title="method core::iter::traits::iterator::Iterator::next"><code>next</code></a> method. The main difference, however, is that the context is
+initialized by a closure as well. That closure takes ownership of the calling <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code>
+</a>instance. For example, <code>scan</code> itself can be implemented as an anonymous function:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code>  <span class="kw">use </span>kompost::<span class="kw-2">*</span>;
 
@@ -62,35 +54,34 @@ as an anonymous function:</p>
           .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()
   );</code></pre></div>
 <p>Full access to the iterator allows solving more complex tasks by means of functional programming
-without having to write your own named Iterator and boilerplate such as related traits and
-blanket implementations. This crate provides examples for
-<a href="composite/fn.transpose.html" title="fn kompost::composite::transpose">Iterator of Iterator transposition</a>
-and <a href="composite/fn.circular_windows.html" title="fn kompost::composite::circular_windows">circular_windows</a>. More useful (read,
-useful to me) examples will be added with time.</p>
+without having to write your own named Iterator and boilerplate such as related traits and blanket
+implementations. This crate provides examples for
+<a href="composite/fn.transpose.html" title="fn kompost::composite::transpose">Iterator over Iterator transposition</a> and
+<a href="composite/fn.circular_windows.html" title="fn kompost::composite::circular_windows"><code>circular_windows</code></a>. More useful (read, useful to me)
+examples will be added with time.</p>
 </li>
 </ul>
 <h3 id="anonymous-iterators"><a class="doc-anchor" href="#anonymous-iterators">§</a>Anonymous iterators</h3>
-<p>Adding a method to <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> requires boilerplate in Rust—just have a look
-at <a href="https://github.com/StefanUlbrich/kompost/blob/main/src/anonymous.rs"><code>src/anonymous.rs</code></a>:</p>
+<p>Adding a method to <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> requires boilerplate in Rust—just have a look at
+<a href="https://github.com/StefanUlbrich/kompost/blob/main/src/anonymous.rs"><code>src/anonymous.rs</code></a>:</p>
 <ul>
-<li>A Struct that holds a state between iterators. Typically, at least a reference to the
-calling <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>.</li>
+<li>A Struct that holds a state between iterators. Typically, at least a reference to the calling
+<a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>.</li>
 <li>A constructor for the struct.</li>
 <li>The implementation of <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code> </a> for the struct</li>
 <li>A trait that defines the method</li>
 <li>A blanket implementation of that trait for all <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>s.</li>
 <li>Finding a good name (This crate is living proof that naming is hard)</li>
 </ul>
-<p>This crate provides convenience by offering anonymous Iterators
-that are defined by two closures only.</p>
-<p>As all <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>s, they are defined by their behavior during their creation
-(<code>new</code> method) and in the <code>next</code> method. The former is given by a user-defined
-closure that receives the current <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> and returns an arbitrary structure which acts as
-the context. It’s recommended
-that this is a tuple that contains the current (now previous) <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>. This closure
-gets executed once (<code>[FnOnce]</code>) in the <a href="anonymous/struct.AnonymousIterator.html#method.new" title="associated function kompost::anonymous::AnonymousIterator::new"><code>new</code></a> method of
-the anonymous Iterator. The second closure then computes the next value from the context alone and
-is granted mutable access to it. Above all, it can call next on any iterator in the context.</p>
+<p>This crate provides convenience by offering anonymous Iterators that are defined by two closures
+only.</p>
+<p>Like all <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>s, they are defined by their behavior during their creation (<code>new</code> method) and in
+the <code>next</code> method. The former is given by a user-defined closure that receives the current
+<a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> and returns an arbitrary structure which acts as the context. It’s recommended that
+this is a tuple that contains the current (now previous) <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>. This closure gets executed
+once (<code>[FnOnce]</code>) in the <a href="anonymous/struct.AnonymousIterator.html#method.new" title="associated function kompost::anonymous::AnonymousIterator::new"><code>new</code></a> method of the anonymous
+Iterator. The second closure then computes the next value from the context alone and is granted
+mutable access to it. Above all, it can call next on any iterator in the context.</p>
 <p>To illustrate, let’s start with the identity (an anonymous iterator that does nothing)</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
@@ -105,8 +96,7 @@ is granted mutable access to it. Above all, it can call next on any iterator in 
         .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
     <span class="macro">vec!</span>[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]
 );</code></pre></div>
-<p>A slightly more complex idea is to collect the iterator first and define
-a custom behavior.</p>
+<p>A slightly more complex idea is to collect the iterator first and define a custom behavior.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
 
@@ -125,12 +115,10 @@ a custom behavior.</p>
         .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;(),
     <span class="macro">vec!</span>[<span class="number">7</span>, <span class="number">6</span>, <span class="number">5</span>]
 );</code></pre></div>
-<p>Note, that the <code>map</code> in the second closure could be moved into the first.
-However, this example shows that you can call <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html#method.collect" title="method core::iter::traits::iterator::Iterator::collect"><code>collect</code></a>
-which allows more complex manipulations:
-For instance, we can transpose a nested iterable
-structure (e.g., <code>Iterator&lt;Item = IntoIterator&lt;_&gt;&gt;</code>) without the need of
-writing a single struct or trait! The example is annotated with the inline type
+<p>Note, that the <code>map</code> in the second closure could be moved into the first. However, this example
+shows that you can call <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html#method.collect" title="method core::iter::traits::iterator::Iterator::collect"><code>collect</code></a> which allows more complex manipulations: For
+instance, we can transpose a nested iterable structure (e.g., <code>Iterator&lt;Item = IntoIterator&lt;_&gt;&gt;</code>)
+without the need of writing a single struct or trait! The example is annotated with the inline type
 hints as shown by <a href="https://rust-analyzer.github.io/">rust-analyzer lsp</a>:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
@@ -159,12 +147,12 @@ hints as shown by <a href="https://rust-analyzer.github.io/">rust-analyzer lsp</
     </span>.collect();
 <span class="macro">assert_eq!</span>(x, [<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>]);</code></pre></div>
 <p>This can be conveniently “bundled” in a composite function—
-<a href="composite/fn.transpose.html" title="fn kompost::composite::transpose"><code>transpose</code></a>
-to be used with the <a href="composed/trait.Composed.html#tymethod.composed" title="method kompost::composed::Composed::composed"><code>composed</code></a> from this crate.</p>
-<p><strong>Note:</strong> You can even use the anonymous iterator to write <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>s that
-generate output. Might come in handy until
-<a href="https://dev-doc.rust-lang.org/beta/unstable-book/language-features/generators.html">generators</a>
-end in stable:</p>
+<a href="composite/fn.transpose.html" title="fn kompost::composite::transpose"><code>transpose</code></a> to be used with the
+<a href="composed/trait.Composed.html#tymethod.composed" title="method kompost::composed::Composed::composed"><code>composed</code></a> from this crate.</p>
+<p><strong>Note:</strong> You can even use the anonymous iterator to write <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>s that generate output. Might
+come in handy until
+<a href="https://dev-doc.rust-lang.org/beta/unstable-book/language-features/generators.html">generators</a> end
+up in stable Rust:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::iter::repeat;
@@ -183,21 +171,18 @@ end in stable:</p>
     .anonymous(|<span class="kw">_</span>| [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>].into_iter(), |it| it.next())
     .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 <span class="macro">assert_eq!</span>(x, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]);</code></pre></div><h3 id="composed-iterators-composite-functions"><a class="doc-anchor" href="#composed-iterators-composite-functions">§</a>Composed iterators (composite functions)</h3>
-<p>Iterator composition allows defining reusable groups of frequently used combinations of
-<a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> methods (such as <code>map</code> or <code>scan</code>) that can be easily tested. Therefore,
-a method <a href="composed/trait.Composed.html#tymethod.composed" title="method kompost::composed::Composed::composed"><code>composed</code></a> is provided. Its
-signature the same as <a href="anonymous/trait.Anonymous.html#tymethod.anonymous" title="method kompost::anonymous::Anonymous::anonymous"><code>anonymous</code></a> minus
-the second closure parameter.</p>
+<p>Iterator composition allows defining reusable groups of frequently used combinations of <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>
+methods (such as <code>map</code> or <code>scan</code>) that can be easily tested. Therefore, a method
+<a href="composed/trait.Composed.html#tymethod.composed" title="method kompost::composed::Composed::composed"><code>composed</code></a> is provided. Its signature the same as
+<a href="anonymous/trait.Anonymous.html#tymethod.anonymous" title="method kompost::anonymous::Anonymous::anonymous"><code>anonymous</code></a> minus the second closure parameter.</p>
 <p>A very simple example has been shown at the beginning of the documentation.</p>
 <p><code>Kompost</code> comes with a few useful (at least to me), predefined composite functions such as
-<a href="composite/fn.transpose.html" title="fn kompost::composite::transpose"><code>transpose</code></a>
-(wrapping the code above) and
+<a href="composite/fn.transpose.html" title="fn kompost::composite::transpose"><code>transpose</code></a> (wrapping the code above) and
 <a href="composite/fn.circular_windows.html" title="fn kompost::composite::circular_windows"><code>circular_windows</code></a>.</p>
-<p>The latter demonstrates a few interesting aspects: How a composite function can accept an
-additional parameter (window size), how more narrow type restrictions can be enforced
-(i.e., it requires an <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/exact_size/trait.ExactSizeIterator.html" title="trait core::iter::traits::exact_size::ExactSizeIterator"><code>ExactSizeIterator</code></a>), and a also more advanced showcase
-of the <code>anonymous</code> method. It’s worth to have a closer look at its (rather compact)
-code:</p>
+<p>The latter demonstrates a few interesting aspects: How a composite function can accept an additional
+parameter (window size), how more narrow type restrictions can be enforced (i.e., it requires an
+<a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/exact_size/trait.ExactSizeIterator.html" title="trait core::iter::traits::exact_size::ExactSizeIterator"><code>ExactSizeIterator</code></a>), and a also more advanced showcase of the <code>anonymous</code> method. It’s worth to
+have a closer look at its (rather compact) code:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
 
@@ -223,10 +208,9 @@ code:</p>
         },
     )
 }</code></pre></div>
-<p>The composite function can then be easily applied but requires a closure to set the
-parameter. The composite function can not return a closure (i.e., be a factory) easily
-as <code>impl</code> cannot be used as a return type of <code>FnOnce</code>—so the full type needs to be
-written down which is often cumbersome.</p>
+<p>The composite function can then be easily applied but requires a closure to set the parameter. The
+composite function can not return a closure (i.e., be a factory) easily as <code>impl</code> cannot be used as
+a return type of <code>FnOnce</code>—so the full type needs to be written down which is often cumbersome.</p>
 <p>Functors will be considered to avoid this (rather small) inconvenience.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
@@ -237,38 +221,42 @@ written down which is often cumbersome.</p>
     .composed(|i| circular_windows(<span class="number">3</span>, i))
     .flatten()
     .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-<span class="macro">assert_eq!</span>(x, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">2</span>])</code></pre></div><h3 id="use-case-2d-sliding-windows-in-wave-function-collapse-wfc"><a class="doc-anchor" href="#use-case-2d-sliding-windows-in-wave-function-collapse-wfc">§</a>Use Case: 2D sliding windows in Wave function collapse (WFC)</h3>
+<span class="macro">assert_eq!</span>(x, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">4</span>,<span class="number">1</span>,<span class="number">2</span>])</code></pre></div><h3 id="case-study-2d-sliding-windows-in-wave-function-collapse-wfc"><a class="doc-anchor" href="#case-study-2d-sliding-windows-in-wave-function-collapse-wfc">§</a>Case study: 2D sliding windows in Wave function collapse (WFC)</h3>
 <p>The idea for this crate came to me when I was looking into
-<a href="https://github.com/mxgmn/WaveFunctionCollapse">Wave Function Collapse (WFC)</a> out of curiosity.
-WFC is a cool algorithm to generate random output similar to a given input (typically, an image).
-It can be used to generate random level in video games or even act as a simple language model.
-As I struggled with the details, I had a look at the
-excellent and feature-complete Rust implementation <a href="https://github.com/Elwqnn/wfc">here</a>.
-It helped me understanding the subtleties of the algorithm I missed, but one implementation detail
-caught my eye. <!-- better -->
-By no means do I want to criticize the implementation, which is great—it’s my tendency
-for over-engineering things. In the extraction of patterns in the sample, a sliding window
-over the sample image uses <a href="https://github.com/Elwqnn/wfc/blob/main/src/wfc.rs#L229-L238">four nested <code>for</code> loops and index magic</a>,
-and I wondered whether this part could be elegantly expressed in terms of Rust <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a>s.
-To my surprise more complex than anticipated, and involved writing at least two new <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a>s resulting in a lot more boilerplate compared to
-the the pragmatic approach with loops. From this observation emerged the idea for this crate
-which hopefully helps in such situations.</p>
-<p>Eventually, it turned out the sliding windows can be formulated in a rather lean and elegant way.
-I want to emphasize that did not require any debugging(!)—once it compiled (which took long enough), the results were correct.
-Manually dealing with indices is more error prone in my experience and might even lead to runtime out-of-bound errors.
-And personally, I simply prefer declarative solutions and the ability to breakdown the problem into smaller, simple and reusable
-building blocks (such as the custom <a href="composite/fn.transpose.html" title="fn kompost::composite::transpose">transpose</a>
-and the <a href="composite/fn.circular_windows.html" title="fn kompost::composite::circular_windows">circular_windows</a> methods). I think is just a  more natural take on the algorithm
-with simple steps:</p>
+<a href="https://github.com/mxgmn/WaveFunctionCollapse">Wave Function Collapse (WFC)</a> out of curiosity. WFC
+is a cool algorithm to generate random output similar to a given input (typically, an image). It can
+be used to generate random level in video games or even act as a simple language model. As I
+struggled with the details, I had a look at the excellent and feature-complete Rust implementation
+<a href="https://github.com/Elwqnn/wfc">here</a>. It helped me understanding the subtleties of the algorithm I
+missed, but one implementation detail caught my eye. <!-- better --> By no means do I want to
+criticize the implementation, which is great—it’s my tendency for over-engineering things. In the
+extraction of patterns in the sample, a sliding window over the sample image uses
+<a href="https://github.com/Elwqnn/wfc/blob/main/src/wfc.rs#L229-L238">four nested <code>for</code> loops and index magic</a>,
+and I wondered whether this part could be elegantly expressed in terms of Rust <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a>s. To my
+surprise more complex than anticipated, and involved writing at least two new <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a>s resulting
+in a lot more boilerplate compared to the the pragmatic approach with loops. From this observation
+emerged the idea for this crate which hopefully helps in such situations.</p>
+<p>Eventually, it turned out the sliding windows can be formulated in a rather lean and elegant way. I
+want to emphasize that did not require any debugging(!)—once it compiled (which took long enough),
+the results were correct. Manually dealing with indices is more error prone in my experience and
+might even lead to runtime out-of-bound errors. And personally, I simply prefer declarative
+solutions and the ability to breakdown the problem into smaller, simple and reusable building blocks
+(such as the custom <a href="composite/fn.transpose.html" title="fn kompost::composite::transpose">transpose</a> and the
+<a href="composite/fn.circular_windows.html" title="fn kompost::composite::circular_windows"><code>circular_windows</code></a> methods). I think is just a more natural
+take on the algorithm with simple steps:</p>
 <ul>
-<li>Start with a nested iteration over the memory (usually using <a href="std::slice::%5BT%5D::chunks"><code>chunks(number_of_columns)</code></a> for row-major layouts)</li>
-<li>Generate a (circular) windows <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> over the <em>outer</em> <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> (i.e., rows in row-major layouts)</li>
-<li>For each of the inner iterables (i.e., <a href="https://doc.rust-lang.org/1.93.0/std/primitive.slice.html" title="primitive slice"><code>slice</code></a>s), generate cycling windows <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>s
-These then iterate over columns (for row-major layouts again).</li>
-<li>As we want to group all the first elements of these column iterators, then the second elements, then the third elements and so on,
-we need to <a href="composite/fn.transpose.html" title="fn kompost::composite::transpose"><code>transpose</code></a>. This is the least obvious step.</li>
-<li>We collect the results and that’s it already. The algorithm can easily be extended to more dimensions—3D, at least, still makes sense for
-creating cave systems and other volumetric structures.</li>
+<li>Start with a nested iteration over the memory (usually using
+<a href="std::slice::%5BT%5D::chunks"><code>chunks(number_of_columns)</code></a> for row-major layouts)</li>
+<li>Generate a (circular) windows <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> over the <em>outer</em> <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> (i.e., rows in row-major
+layouts)</li>
+<li>For each of the inner iterables (i.e., <a href="https://doc.rust-lang.org/1.93.0/std/primitive.slice.html" title="primitive slice"><code>slice</code></a>s), generate circular windows <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a>s. These
+then iterate over columns (for row-major layouts again).</li>
+<li>As we want to group all the first elements of these column iterators, then the second elements,
+then the third elements and so on, we need to <a href="composite/fn.transpose.html" title="fn kompost::composite::transpose"><code>transpose</code></a>. This is
+the least obvious step.</li>
+<li>We collect the results and that’s it already. The algorithm can easily be extended to more
+dimensions—3D, at least, still makes sense for creating cave systems and other volumetric
+structures.</li>
 </ul>
 <p>With the custom methods defined in the previous sections, this translates to:</p>
 
@@ -285,10 +273,10 @@ array_2d
                 .composed(<span class="kw">move </span>|it| circular_windows(size_n.clone(), it))
         })
         .composed(transpose)
-    });
-    </code></pre></div>
-<p>This functionality is wrapped in the <a href="composite/fn.circular_windows_2d_slice.html" title="fn kompost::composite::circular_windows_2d_slice"><code>circular_windows_2d_slice</code></a> and <a href="composite/fn.circular_windows_2d_slice.html" title="fn kompost::composite::circular_windows_2d_slice"><code>window_2d</code></a> compositions.
-It can be used on slices</p>
+    });</code></pre></div>
+<p>This functionality is wrapped in the
+<a href="composite/fn.circular_windows_2d_slice.html" title="fn kompost::composite::circular_windows_2d_slice"><code>circular_windows_2d_slice</code></a> and
+<a href="composite/fn.circular_windows_2d_slice.html" title="fn kompost::composite::circular_windows_2d_slice"><code>window_2d</code></a> compositions. It can be used on slices</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
 <span class="kw">use </span>kompost::composite::<span class="kw-2">*</span>;
@@ -312,8 +300,7 @@ It can be used on slices</p>
         [<span class="number">8</span>, <span class="number">9</span>, <span class="number">2</span>, <span class="number">3</span>],
         [<span class="number">9</span>, <span class="number">7</span>, <span class="number">3</span>, <span class="number">1</span>],
     ]
-);
-</code></pre></div>
+);</code></pre></div>
 <p>and, again more general, on <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a> of <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator"><code>Iterator</code></a></p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>kompost::<span class="kw-2">*</span>;
@@ -342,9 +329,10 @@ It can be used on slices</p>
         [<span class="number">9</span>, <span class="number">7</span>, <span class="number">3</span>, <span class="number">1</span>],
     ]
 );</code></pre></div>
-<p>The WFC algorithm is of course, much more complex. It also requires finding <em>unique</em> patterns, adjacency relations between patterns,
-handling symmetries and much more, which are way of of context for this section. Uniqueness, however,
-is fun to integrate. With the help from a method from the <a href="https://docs.rs/itertools/latest/itertools/"><code>itertools</code></a> crate, this is already too easy.
+<p>The WFC algorithm is of course, much more complex. It also requires finding <em>unique</em> patterns,
+adjacency relations between patterns, handling symmetries and much more, which are way of of context
+for this section. Uniqueness, however, is fun to integrate. With the help from a method from the
+<a href="https://docs.rs/itertools/latest/itertools/"><code>itertools</code></a> crate, this is already too easy.
 Uniqueness is achieved by …</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>itertools::Itertools;
@@ -362,11 +350,10 @@ Uniqueness is achieved by …</p>
     .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
 <span class="macro">assert_eq!</span>(r.len(), <span class="number">6</span>);</code></pre></div>
-<p>How convenient! This is why <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a>s are so cool. Yet, we can achieve the same without using
-an external crate.
-The next lines generate a <a href="https://doc.rust-lang.org/1.93.0/std/collections/hash/set/struct.HashSet.html" title="struct std::collections::hash::set::HashSet"><code>HashSet</code></a> with unique patterns for
-each window over the rows. These can be collapsed into a final
-single hashset that yields the unique patterns.</p>
+<p>How convenient! This is why <a href="https://doc.rust-lang.org/1.93.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a>s are so cool. Yet, we can achieve the same without using an
+external crate. The next lines generate a <a href="https://doc.rust-lang.org/1.93.0/std/collections/hash/set/struct.HashSet.html" title="struct std::collections::hash::set::HashSet"><code>HashSet</code></a> with unique
+patterns for each window over the rows. These can be collapsed into a final single hashset that
+yields the unique patterns.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>std::collections::HashSet;
 <span class="kw">use </span>kompost::<span class="kw-2">*</span>;
@@ -381,19 +368,18 @@ single hashset that yields the unique patterns.</p>
             row_window.map(|window| window.flatten().copied().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
         )
     })
-    .reduce(|acc, set| {
-        <span class="kw">let </span><span class="kw-2">mut </span>acc = acc.clone();
+    .fold(HashSet::new(), |<span class="kw-2">mut </span>acc, set| {
         acc.extend(set);
-        acc.clone()
-    })
-    .unwrap();
+        acc
+    });
 
 <span class="macro">assert_eq!</span>(r.len(), <span class="number">6</span>);</code></pre></div>
-<p>It works but is more verbose and probably even less efficient. However, as the unique sets
-are computed independently for each axis, we can consider parallelizing the computation!
-For higher dimensions or large arrays, this can lead to relevant performance improvements.</p>
-<p><a href="https://docs.rs/rayon/latest/rayon/"><code>Rayon</code></a> is the first choice for parallelization in Rust and works well with concept of
-iteration. <code>Kompost</code> does not support rayon yet so this will be the next thing to do!</p>
+<p>It works but is more verbose and probably even less efficient. However, as the unique sets are
+computed independently for each axis, we can consider parallelizing the computation! For higher
+dimensions or large arrays, this can lead to relevant performance improvements.</p>
+<p><a href="https://docs.rs/rayon/latest/rayon/"><code>Rayon</code></a> is the first choice for parallelization in Rust and
+works well with concept of iteration. <code>Kompost</code> does not support rayon yet so this will be the next
+thing to do!</p>
 <h3 id="acknowledgements"><a class="doc-anchor" href="#acknowledgements">§</a>Acknowledgements</h3>
 <p><strong>Made with 💙—not with AI.</strong></p>
 <p>But also with <a href="https://helix-editor.vercel.app/">helix</a>, <a href="https://zellij.dev">zellij</a>,
