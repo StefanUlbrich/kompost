@@ -21,60 +21,10 @@
 //! as each closure has its own type and hence, a constant closure cannot be used within the
 //! [Anonymous](crate::Anonymous) trait.
 
-use std::marker::PhantomData;
-
-/// Iterator that with a context and a closures called in the [`ComposedIterator::new`] and
-/// [`ComposedIterator::next`] methods. Used in the [`Composed`] trait.
-///
-/// [`crate::anonymous::AnonymousIterator`] could not be used as a constant closure cannot be used within
-/// the implementation of [`Composed`].
-pub struct ComposedIterator<IterIn, IterOut, In, Out, Init>
+pub trait Composed<IterOut, Func>: Sized
 where
-    Init: FnOnce(IterIn) -> IterOut,
-
-    IterIn: Iterator<Item = In>,
-    IterOut: Iterator<Item = Out>,
-{
-    iter: IterOut,
-    _iter: PhantomData<IterIn>,
-    _init: PhantomData<Init>,
-}
-
-impl<IterIn, IterOut, In, Out, Init> ComposedIterator<IterIn, IterOut, In, Out, Init>
-where
-    Init: FnOnce(IterIn) -> IterOut,
-
-    IterIn: Iterator<Item = In>,
-    IterOut: Iterator<Item = Out>,
-{
-    pub fn new(iter: IterIn, init_fn: Init) -> Self {
-        Self {
-            iter: init_fn(iter),
-            _iter: PhantomData,
-            _init: PhantomData,
-        }
-    }
-}
-
-impl<IterIn, IterOut, In, Out, Init> Iterator for ComposedIterator<IterIn, IterOut, In, Out, Init>
-where
-    Init: FnOnce(IterIn) -> IterOut,
-
-    IterIn: Iterator<Item = In>,
-    IterOut: Iterator<Item = Out>,
-{
-    type Item = Out;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        self.iter.next()
-    }
-}
-pub trait Composed<IterIn, IterOut, In, Out, Init>
-where
-    Init: FnOnce(IterIn) -> IterOut,
-
-    IterIn: Iterator<Item = In>,
-    IterOut: Iterator<Item = Out>,
+    IterOut: Iterator,
+    Func: FnOnce(Self) -> IterOut,
 {
     /// Allows defining grouping frequently used [`Iterator`] methods (such as `map` or `scan`)
     /// and reuse them.
@@ -83,17 +33,15 @@ where
     ///
     /// * `init_fn`: The closure that receives the current [`IntoIterator`] and produces the initial
     ///   context.
-    fn composed(self, init_fs: Init) -> ComposedIterator<IterIn, IterOut, In, Out, Init>;
+    fn composed(self, init_fs: Func) -> IterOut;
 }
 
-impl<IterIn, IterOut, In, Out, Init> Composed<IterIn, IterOut, In, Out, Init> for IterIn
+impl<Iter, IterOut, Func> Composed<IterOut, Func> for Iter
 where
-    Init: FnOnce(IterIn) -> IterOut,
-
-    IterIn: Iterator<Item = In>,
-    IterOut: Iterator<Item = Out>,
+    IterOut: Iterator,
+    Func: FnOnce(Iter) -> IterOut,
 {
-    fn composed(self, init_fn: Init) -> ComposedIterator<IterIn, IterOut, In, Out, Init> {
-        ComposedIterator::new(self, init_fn)
+    fn composed(self, init_fs: Func) -> IterOut {
+        init_fs(self)
     }
 }
