@@ -50,7 +50,7 @@ pub fn transpose_slice<'a, T: 'a + Copy>(
                     .filter_map(Iterator::next) // impl Iterator<Item = &i32>
                     // .filter_map(|i| i.next()) // impl Iterator<Item = &i32>
                     .collect::<Vec<_>>(); // Vec<&i32>
-                                          // If the iterators over the rows return `None`, transpose is empty
+                // If the iterators over the rows return `None`, transpose is empty
                 if transposed.is_empty() {
                     None
                 } else {
@@ -119,23 +119,7 @@ pub fn circular_windows<T>(
     size: usize,
     it: impl ExactSizeIterator<Item = T> + Clone,
 ) -> impl Iterator<Item = impl Iterator<Item = T>> {
-    it.anonymous(
-        |it| {
-            let len = it.len();
-            (0usize, len, it.cycle())
-            // it.take(len)
-        },
-        move |(i, len, it)| {
-            let window = it.clone();
-            it.next();
-            *i += 1;
-            if i <= len {
-                Some(window.take(size))
-            } else {
-                None
-            }
-        },
-    )
+    (0..it.len()).map(move |i| it.clone().chain(it.clone()).skip(i).take(size))
 }
 
 //TODO move example to Readme and link to document
