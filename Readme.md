@@ -243,6 +243,18 @@ pub fn circular_windows<T>(
 }
 ```
 
+This code, however, can be improved and even be further narrowed down to a single line and avoid using
+the `anonymous` approach in a purely functional manner:
+
+```rust
+pub fn circular_windows<T>(
+    size: usize,
+    it: impl ExactSizeIterator<Item = T> + Clone,
+) -> impl Iterator<Item = impl Iterator<Item = T>> {
+    (0..it.len()).map(move |i| it.clone().chain(it.clone()).skip(i).take(size))
+}
+```
+
 The composite function can then be easily applied but requires a closure to set the parameter. The
 composite function can not return a closure (i.e., be a factory) easily as `impl` cannot be used as
 a return type of `FnOnce`—so the full type needs to be written down which is often cumbersome.

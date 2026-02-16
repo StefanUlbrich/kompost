@@ -9,7 +9,8 @@ composition of Iterator methods and anonymous Iterators—all without writing
 any trait or struct, without macros or unsafe code.
 """
 license = "MIT"
-liccense-file = "license.md"
+license-file = "license.txt"
+
 repository = "https://github.com/StefanUlbrich/kompost"
 readme = "Readme.md"
 
