@@ -208,6 +208,15 @@ have a closer look at its (rather compact) code:</p>
         },
     )
 }</code></pre></div>
+<p>This code, however, can be improved and even be further narrowed down to a single line and avoid using
+the <code>anonymous</code> approach in a purely functional manner:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">pub fn </span>circular_windows&lt;T&gt;(
+    size: usize,
+    it: <span class="kw">impl </span>ExactSizeIterator&lt;Item = T&gt; + Clone,
+) -&gt; <span class="kw">impl </span>Iterator&lt;Item = <span class="kw">impl </span>Iterator&lt;Item = T&gt;&gt; {
+    (<span class="number">0</span>..it.len()).map(<span class="kw">move </span>|i| it.clone().chain(it.clone()).skip(i).take(size))
+}</code></pre></div>
 <p>The composite function can then be easily applied but requires a closure to set the parameter. The
 composite function can not return a closure (i.e., be a factory) easily as <code>impl</code> cannot be used as
 a return type of <code>FnOnce</code>—so the full type needs to be written down which is often cumbersome.</p>
